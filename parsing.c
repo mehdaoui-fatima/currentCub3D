@@ -11,7 +11,7 @@ void initializedata(t_data *cubdata)
 	cubdata->fg = -1;
 	cubdata->fb = -1; 
 	cubdata->res = 0;// no idea
-	cubdata->map = ft_strdup("");
+	cubdata->map = ft_strdup("");;
 }
 
 int ok(char **newline)
@@ -65,20 +65,19 @@ void	clear(t_data *cubdata)
 }
  */
 
-int 	resolution(t_data *cubdata)
+int 	resolution(t_data *cubdata, int *i)
 {
-//	printf("%s\n",cubdata->line);
 	if(cubdata->res != 3)
 		ft_putstr_fd("error: incorrect line", 1);
 	else if(cubdata->rx != -1)
 		ft_putstr_fd("error: duplicate line", 1);
-	else if ( !(ft_isnumber(cubdata->newline[1]) 
-				&& ft_isnumber(cubdata->newline[2])) )
+	else if ( !(ft_isnumber(cubdata->newline[*i + 1]) 
+				&& ft_isnumber(cubdata->newline[*i + 2])) )
 		ft_putstr_fd("error: line containe strings instead of integers", 1);
 	else 
 	{
-		cubdata->rx = ft_atoi(cubdata->newline[1]);
-		cubdata->ry = ft_atoi(cubdata->newline[2]);
+		cubdata->rx = ft_atoi(cubdata->newline[*i + 1]);
+		cubdata->ry = ft_atoi(cubdata->newline[*i + 2]);
 		if (cubdata->rx < 0 || cubdata->ry < 0)
 			ft_putstr_fd("error: screen height and weidth shoud be positive", 1);
 		//!!! if number zere so small or too large
@@ -223,10 +222,11 @@ void	ft_getstr(t_data *cubdata)
 
 t_data *parssing(t_data *cubdata, char *argv)
 {
-	int i = 0;
+	int i;
 	char *mapt[40];
-	int x = 0;
+	int x;
 	
+
 	if ((cubdata->fd = open(argv, O_RDONLY)) < 0)
 	{ 
 		perror(strerror(errno));
@@ -235,10 +235,12 @@ t_data *parssing(t_data *cubdata, char *argv)
 	initializedata(cubdata);
 	while((cubdata->r = get_next_line(cubdata->fd,&(cubdata->line))) > 0)
 	{
-		
+		i = 0;
+		x = 0;
 		cubdata->newline = ft_split(cubdata->line, ' ');
 		cubdata->res = ok(cubdata->newline);
-	
+		while(cubdata->newline[i])
+		{
 			//dont forgot ..if digit 
 			/* if(ft_isdigit(cubdata->newline[i][0]))
 			{
@@ -247,57 +249,55 @@ t_data *parssing(t_data *cubdata, char *argv)
 			// line containe tkharbi9a jbkbcbicq
 			if( ft_strcmp(cubdata->newline[0], "R") == 0 )
 			{	
-				printf("im here rx = |%d|\n",cubdata->rx);
-				if(resolution(cubdata))
+				if(resolution(cubdata, &i))	
 					exit(0);
-			 }	
-			// else if( ft_strcmp(cubdata->newline[0], "C") == 0 || 
-			// 			ft_strcmp(cubdata->newline[0], "F") == 0)
-			// {
-			// 		if(!ft_ceil_floor(cubdata))
-			// 			exit(0);
-			// }
-			// else if( ft_strcmp(cubdata->newline[0], "NO") == 0
-			// 		|| ft_strcmp(cubdata->newline[0], "SO") == 0
-			// 		|| ft_strcmp(cubdata->newline[0], "WE") == 0
-			// 		|| ft_strcmp(cubdata->newline[0], "EA") == 0
-			// 		|| ft_strcmp(cubdata->newline[0], "S") == 0 )
-			// {
-			// 	if(!texture(cubdata))
-			// 		exit(0);
-			// }
-			// else if(cubdata->line[0] == ' ' || cubdata->line[0] == '1')
-			// {
+			}	//there is a problem so we should exit	
+			else if( ft_strcmp(cubdata->newline[0], "C") == 0 || 
+						ft_strcmp(cubdata->newline[0], "F") == 0)
+			{
+					if(!ft_ceil_floor(cubdata))
+						exit(0);
+			}
+			else if( ft_strcmp(cubdata->newline[0], "NO") == 0
+					|| ft_strcmp(cubdata->newline[0], "SO") == 0
+					|| ft_strcmp(cubdata->newline[0], "WE") == 0
+					|| ft_strcmp(cubdata->newline[0], "EA") == 0
+					|| ft_strcmp(cubdata->newline[0], "S") == 0 )
+			{
+				if(!texture(cubdata))
+					exit(0);
+			}
+			else if(cubdata->line[0] == ' ' || cubdata->line[0] == '1')
+			{
 				 
-			// 			mapt[x] = cubdata->line;
-			// 			printf("|%s|\n",mapt[x]);
-			// 	/* else
-			// 	{
-			// 		ft_errors("map incorrect");
-			// 		exit(0);
-			// 	}	 */
-			// 	//cubdata->map = ft_strjoin(cubdata->map, cubdata->newline[0]);
-			// 	//cubdata->map = ft_strjoin(cubdata->map, cubdata->line);
-			// }
+						mapt[x] = cubdata->line;
+						printf("|%s|\n",mapt[x]);
+				/* else
+				{
+					ft_errors("map incorrect");
+					exit(0);
+				}	 */
+				//cubdata->map = ft_strjoin(cubdata->map, cubdata->newline[0]);
+				//cubdata->map = ft_strjoin(cubdata->map, cubdata->line);
+			}
 		 	/* else
 			{
 				errors(cubdata);
 			}
-			
 	 */
-			
-		
-			//free(cubdata->line);
-			//free(cubdata->newline[i]);
-		//free(cubdata->line);
+			free(cubdata->newline[i]);
+			i++;
+			x++;
+		}
+		free(cubdata->line);
 	}
 
 	
-	 printf("rx:%d\n ry:%d\n cr:%d\n cg:%d\n rb:%d\n",cubdata->rx,
+	/* printf("rx:%d\n ry:%d\n cr:%d\n cg:%d\n rb:%d\n",cubdata->rx,
 	cubdata->ry,cubdata->cr,cubdata->cg,cubdata->cb);
 	printf("fr:%d\n fg:%d\n fb:%d\n",cubdata->fr,cubdata->fg,cubdata->fb);
-	// printf("NO:%s\nSO:%s\nWE:%s\nEA:%s\n S:%s\n",
-	// cubdata->no,cubdata->so,cubdata->we,cubdata->ea,cubdata->s); 
+	printf("NO:%s\nSO:%s\nWE:%s\nEA:%s\n S:%s\n",
+	cubdata->no,cubdata->so,cubdata->we,cubdata->ea,cubdata->s); */
 	return (cubdata);
 
-}
+}	

@@ -16,12 +16,6 @@
 
 #include "cub3d.h"
 
-
-int ft_close(void)
-{
-	exit(0);
-}
-
 int main(int argc, char **argv)
 {
 	if(argc < 2)
@@ -41,7 +35,7 @@ int main(int argc, char **argv)
 		draw_wall(&cub3d);//to draw walls for the first time the screen is opened 
 		mlx_put_image_to_window(cub3d.connection, cub3d.window, cub3d.image_ptr, 0, 0);
 		mlx_hook(cub3d.window, 2, 0, ft_key_press, &cub3d);
-		mlx_hook(cub3d.window, 17, 0, ft_close, &cub3d);
+		mlx_hook(cub3d.window, 17, 0, ft_key_press, &cub3d);
 		mlx_loop(cub3d.connection);
 	}
 	

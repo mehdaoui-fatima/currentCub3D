@@ -26,14 +26,17 @@
 
 #define mapWidth 24
 #define mapHeight 24
-#define screenWidth 700
-#define screenHeight 700
-#define lookup 126
-#define lookdown  125
-#define moveright 124
-#define moveleft 123
+#define screenWidth 640
+#define screenHeight 480
+#define texWidth 64
+#define texHeight 64
 #define max_width 1024
 #define max_height 768
+#define move_right 2
+#define move_left 0
+#define move_towards 13
+#define move_backwards 1
+#define exit_ 53
 
 
 typedef struct s_cub3d{
@@ -61,6 +64,7 @@ typedef struct s_cub3d{
     int side;
     double deltadistx;
     double deltadisty;
+    int *texture;
     int color ;
     double movespeed;
     double rotspeed;
@@ -109,7 +113,6 @@ typedef struct s_data{
   char *s;
   char *map;
 }				t_data;
-
 
 t_cub3d     *initialize(t_cub3d  *cub3d);//init cub3d
 t_data      *parssing(t_data *cubdata, char *argv); //parsing .cub

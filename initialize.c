@@ -2,6 +2,8 @@
 #include "cub3d.h"
 
 
+
+
 t_cub3d    *initialize(t_cub3d  *cub3d)
 {
 	cub3d->posx = 22;
@@ -23,6 +25,7 @@ t_cub3d    *initialize(t_cub3d  *cub3d)
 	cub3d->plus = 0;
 	cub3d->jump = 0;
 	cub3d->jumpback = 0;
+	int texture[8];
 	return (cub3d);
 }
 

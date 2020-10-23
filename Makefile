@@ -19,6 +19,8 @@ CUB3D = cub3d.c
 
 CUBLIB = cub3d.a
 
+MLX = ./minilibx/libmlx.a
+
 SRCS = initialize.c \
 	   ./gnl/get_next_line.c \
 	   ./gnl/get_next_line_utils.c \
@@ -31,9 +33,7 @@ FLAGS=-Wall -Werror -Wextra
 
 CC=gcc
 
-INCLUDES = -I /usr/local/bin 
-
-LIBS = -l mlx -framework OpenGL -framework AppKit 
+LIBS = -lz -framework OpenGL -framework AppKit -I mlx
 
 .PHONY: clean fclean all re
 
@@ -42,8 +42,7 @@ all: $(NAME)
 $(NAME): ${OBJS}
 		 $(MAKE) -C ./libft
 		 ar rcs $(CUBLIB) $(OBJS)
-		 gcc $(CUB3D) $(CUBLIB) $(LIBFT) $(LIBS) -o $(NAME) 
-
+		 gcc -Wall -Werror -Wextra $(CUB3D) $(CUBLIB) $(LIBFT) $(MLX) $(LIBS) -o $(NAME) 
 
 %.o : %.c
 	$(CC) -c -o $@ $< 
@@ -54,6 +53,7 @@ clean:
 	rm -f ./gnl/*.o
 fclean: clean
 	$(MAKE) -C ./libft fclean
+	#$(MAKE) -C ./minilibx fclean
 	rm -f $(NAME)
 	rm -f $(CUBLIB)
 re: fclean all

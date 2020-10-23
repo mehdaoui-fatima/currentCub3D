@@ -17,10 +17,10 @@ int worldMap[mapWidth][mapHeight]=
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,4,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -44,7 +44,7 @@ void	draw_wall_cx(t_cub3d *cub3d)
 void	draw_wall_delta( t_cub3d *cub3d)
 {
 	cub3d->deltadistx = (cub3d->raydiry == 0)? 0 : ((cub3d->raydirx == 0)? 1 : fabs(1/cub3d->raydirx));
-	cub3d->deltadisty = (cub3d->raydirx == 0) ? 0 : ((cub3d->raydiry == 0) ? 1 : fabs(1 / cub3d->raydiry));;
+	cub3d->deltadisty = (cub3d->raydirx == 0) ? 0 : ((cub3d->raydiry == 0) ? 1 : fabs(1 / cub3d->raydiry));
 	cub3d->mapx = (int)cub3d->posx;
 	cub3d->mapy= (int)cub3d->posy;
 }
@@ -194,78 +194,35 @@ void    draw_wall(t_cub3d *cub3d)
 	//printf("****%d\n",cub3d->drawStart);
 }
 
-
-
-
 int ft_key_press(int keycode, t_cub3d *cub3d)
 {
 //	printf("%d",keycode);
 	if (cub3d->movespeed > 1)
 		cub3d->movespeed *= 0.1;
-	if (keycode == 49)
-	{
-		//printf("im here *\n");
-		cub3d->jump = 1;
-		//cub3d->jumpback = -1;
-	}
-	//printf("posx:%d    dirx*movespeed:%d     totale:%d \n",
-	//(int) (cub3d->posx),(int)(cub3d->dirx * cub3d->movespeed),(int)(cub3d->posx + cub3d->dirx * cub3d->movespeed));
-	if (keycode == 126)
-	{
-		cub3d->change = 1;
-		if (cub3d->drawStart <= screenHeight - 20)
-			cub3d->plus += 10;
-	}
-	if (keycode == 125)
-	{
-		cub3d->change = -1;
-		if (cub3d->drawEnd >= 10)
-			cub3d->plus -= 10;
-	}
-	if (keycode == 13)
+	if (keycode == move_towards)
 	{
 		if(worldMap[(int)(cub3d->posx + cub3d->dirx * cub3d->movespeed)][(int)(cub3d->posy)] == 0) 
 			cub3d->posx += cub3d->dirx * cub3d->movespeed;
 		if(worldMap[(int)(cub3d->posx)][(int)(cub3d->posy + cub3d->diry * cub3d->movespeed)] == 0)
 		cub3d->posy += cub3d->diry * cub3d->movespeed;
 	}
-	if (keycode == 1)
+	if (keycode == move_backwards)
 	{
 		if(worldMap[(int)(cub3d->posx - cub3d->dirx * cub3d->movespeed)][(int)(cub3d->posy)] == 0)
 			cub3d->posx -= cub3d->dirx * cub3d->movespeed;
 		if(worldMap[(int)(cub3d->posx)][(int)(cub3d->posy - cub3d->diry * cub3d->movespeed)] == 0)
 			cub3d->posy -= cub3d->diry * cub3d->movespeed;
-		
 	}
-	// move_left_side
-	// if (keycode == 0)
-	// {
-	// 	if(worldMap[(int)(cub3d->posx + cub3d->dirx * cub3d->movespeed)][(int)(cub3d->posy)] == 0) 
-	// 		cub3d->posx += cub3d->dirx * cub3d->movespeed;
-	// 	if(worldMap[(int)(cub3d->posx)][(int)(cub3d->posy + cub3d->diry * cub3d->movespeed)] == 0)
-	// 	cub3d->posy += cub3d->diry * cub3d->movespeed;
-	// }
-	// move_right_side
-	// if (keycode == 2)
-	// {
-	// 	if(worldMap[(int)(cub3d->posx - cub3d->dirx * cub3d->movespeed)][(int)(cub3d->posy)] == 0)
-	// 		cub3d->posx -= cub3d->dirx * cub3d->movespeed;
-	// 	if(worldMap[(int)(cub3d->posx)][(int)(cub3d->posy - cub3d->diry * cub3d->movespeed)] == 0)
-	// 		cub3d->posy -= cub3d->diry * cub3d->movespeed;
-		
-	// }
-	if (keycode == moveright)
+	if (keycode == move_right)
 	{
-
 		cub3d->olddirx = cub3d->dirx;
 		cub3d->dirx = cub3d->dirx * cos(-cub3d->rotspeed) - cub3d->diry * sin(-cub3d->rotspeed);
 		cub3d->diry = cub3d->olddirx * sin(-cub3d->rotspeed) + cub3d->diry * cos(-cub3d->rotspeed);
 		cub3d->oldplanx = cub3d->planx;
 		cub3d->planx = cub3d->planx * cos(-cub3d->rotspeed) - cub3d->plany * sin(-cub3d->rotspeed);
 		cub3d->plany = cub3d->oldplanx * sin(-cub3d->rotspeed) + cub3d->plany * cos(cub3d->rotspeed);
-
 	}
-	if (keycode == moveleft)
+	if (keycode == move_left)
 	{
 		cub3d->olddirx =  cub3d->dirx;
 		cub3d->dirx =  cub3d->dirx * cos( cub3d->rotspeed) -  cub3d->diry * sin( cub3d->rotspeed);
@@ -273,25 +230,14 @@ int ft_key_press(int keycode, t_cub3d *cub3d)
 		cub3d->oldplanx =  cub3d->planx;
 		cub3d->planx =  cub3d->planx * cos(cub3d->rotspeed) -  cub3d->plany * sin( cub3d->rotspeed);
 		cub3d->plany =  cub3d->oldplanx * sin(cub3d->rotspeed) + cub3d->plany * cos(cub3d->rotspeed);
-   
 	}
-	if (keycode == 53)
+	if (keycode == exit_)
 		exit(1);
 	mlx_clear_window(cub3d->connection, cub3d->window);
 	mlx_destroy_image(cub3d->connection, cub3d->image_ptr);
 	cub3d->image_ptr = mlx_new_image(cub3d->connection, screenWidth, screenHeight);
 	cub3d->data = (int*)mlx_get_data_addr(cub3d->image_ptr, &(cub3d->bpp), &(cub3d->size), &(cub3d->endian));
 	draw_wall(cub3d);
-	if (cub3d->jump == 1)
-	{
-		cub3d->jump = 0;
-		cub3d->jumpback = -1;
-		mlx_clear_window(cub3d->connection, cub3d->window);
-		mlx_destroy_image(cub3d->connection, cub3d->image_ptr);
-		cub3d->image_ptr = mlx_new_image(cub3d->connection, screenWidth, screenHeight);
-		draw_wall(cub3d);
-		cub3d->jumpback = 0;
-	 }
 	mlx_put_image_to_window(cub3d->connection, cub3d->window, cub3d->image_ptr, 0, 0);
 	return (0);
 }

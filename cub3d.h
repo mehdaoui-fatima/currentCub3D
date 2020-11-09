@@ -22,12 +22,13 @@
 #include <string.h> //strerror
 #include "./libft/libft.h"
 #include "./gnl/get_next_line.h"
+#include "./minilibx/mlx_png.h"
 
 
 #define mapWidth 24
 #define mapHeight 24
-#define screenWidth 640
-#define screenHeight 480
+#define screenWidth 1200
+#define screenHeight 1200
 #define texWidth 64
 #define texHeight 64
 #define max_width 1024
@@ -37,6 +38,24 @@
 #define move_towards 13
 #define move_backwards 1
 #define exit_ 53
+
+
+typedef struct s_img
+{
+  void   *image_ptr;//to under
+  int *data;  /* it shoud be char * but we use int so it
+                 can represent 4char=1pixel
+                each index will represent one complete 
+                color of a pixel
+                 */
+  int bpp;//to 
+  int endian;
+  int size;
+  int h;
+  int w;
+} t_img;
+
+
 
 
 typedef struct s_cub3d{
@@ -64,21 +83,13 @@ typedef struct s_cub3d{
     int side;
     double deltadistx;
     double deltadisty;
-    int *texture;
     int color ;
     double movespeed;
     double rotspeed;
     double olddirx;
     double oldplanx;
-    void   *image_ptr;//to under
-    int *data;  /* it shoud be char * but we use int so it
-                 can represent 4char=1pixel
-                each index will represent one complete 
-                color of a pixel
-                 */
-    int bpp;//to 
-    int endian;
-    int size;
+    t_img img;
+    t_img texture[5];//array of images for texture
     int lineHeight;
     int drawStart ;
     int drawEnd;
@@ -86,17 +97,24 @@ typedef struct s_cub3d{
    int plus;//for lookup lookdown
    int jump;//too jump
    int jumpback;//how much we will jump
-
-
+   char *path;
+   double wallx;
+   int texx;
+  double  step;
+  double  texpos;
+  int  texy;
 }				t_cub3d;
+
+
+
 
 // used to parse map.cub
 typedef struct s_data{
   char *line;
   int r;
   int fd;
-  int rx;
-  int ry;
+  long long rx;
+  long long ry;
   char **newline;
   char **new;
   int cr;
@@ -106,18 +124,23 @@ typedef struct s_data{
   int fg;
   int fb;
 	int res;
-  char *no;
-  char *so;
-  char *we;
-  char *ea;
-  char *s;
-  char *map;
+  char *north;
+  char *south;
+  char *west;
+  char *east;
+  char *sprite;
+  int err;
+  int index;
+  int spaces;
+  char **map;
 }				t_data;
 
+
 t_cub3d     *initialize(t_cub3d  *cub3d);//init cub3d
-t_data      *parssing(t_data *cubdata, char *argv); //parsing .cub
-void    draw_wall(t_cub3d *cub3d);// drawing walls
-int ft_key_press(int keycode, t_cub3d *cub3d);//to be able to used by main
+t_data      *parsing(t_data *cubdata, char *argv); //parsing .cub
+void        draw_wall(t_cub3d *cub3d);// drawing walls
+int         ft_key_press(int keycode, t_cub3d *cub3d);//to be able to used by main
+void        texture(t_cub3d *cub3d);
 
 
 

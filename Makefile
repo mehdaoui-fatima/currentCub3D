@@ -40,20 +40,20 @@ LIBS = -lz -framework OpenGL -framework AppKit -I mlx
 all: $(NAME)
 
 $(NAME): ${OBJS}
-		 $(MAKE) -C ./libft
-		 ar rcs $(CUBLIB) $(OBJS)
-		 gcc -Wall -Werror -Wextra $(CUB3D) $(CUBLIB) $(LIBFT) $(MLX) $(LIBS) -o $(NAME) 
+		 @$(MAKE) -C ./libft
+		 @ar rcs $(CUBLIB) $(OBJS)
+		 @gcc -Wall -Werror -Wextra $(CUB3D) $(CUBLIB) $(LIBFT) $(MLX) $(LIBS) -o $(NAME) 
 
 %.o : %.c
-	$(CC) -c -o $@ $< 
+	@$(CC) -c -o $@ $< 
  
 clean:
-	$(MAKE) -C ./libft clean
-	rm -f *.o
-	rm -f ./gnl/*.o
+	@$(MAKE) -C ./libft clean
+	@rm -f *.o
+	@rm -f ./gnl/*.o
 fclean: clean
-	$(MAKE) -C ./libft fclean
+	@$(MAKE) -C ./libft fclean
 	#$(MAKE) -C ./minilibx fclean
-	rm -f $(NAME)
-	rm -f $(CUBLIB)
+	@rm -f $(NAME)
+	@rm -f $(CUBLIB)
 re: fclean all

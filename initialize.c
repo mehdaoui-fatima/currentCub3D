@@ -21,11 +21,12 @@ t_cub3d    *initialize(t_cub3d  *cub3d)
 	cub3d->rotspeed = 0.2;
 	//double olddirx ;
 	//double oldplanx;
-	cub3d->change = 0;
-	cub3d->plus = 0;
-	cub3d->jump = 0;
-	cub3d->jumpback = 0;
-	int texture[8];
+	// cub3d->change = 0;
+	// cub3d->plus = 0;
+	// cub3d->jump = 0;
+	// cub3d->jumpback = 0;
+	cub3d->img.h = -1;
+	cub3d->img.w = -1;
 	return (cub3d);
 }
 

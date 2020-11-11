@@ -133,6 +133,7 @@ typedef struct s_data{
   int index;
   int spaces;
   char **map;
+  int map_len;
 }				t_data;
 
 

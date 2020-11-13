@@ -304,7 +304,7 @@ void	ft_mapvalid(t_data *cubdata)
 		ft_borders(str[0], str[len]);
 		//printf("\n|%s|\n|",cubdata->map[i]);
 		j = 0;
-		if (i == 0 || i == cubdata->index)
+		if (i == 0 || i == cubdata->index) 
 					continue;
 		while(cubdata->map[i][j])
 		{

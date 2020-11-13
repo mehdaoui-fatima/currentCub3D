@@ -290,7 +290,7 @@ void	ft_mapvalid(t_data *cubdata)
 	int i;
 	int j;
 	int	len;
-	char *str;
+	char *str;     
 
 	i = -1;
 	first_last_line(cubdata->map[0], cubdata->map[cubdata->index]);

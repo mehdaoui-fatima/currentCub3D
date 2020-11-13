@@ -274,15 +274,52 @@ void first_last_line(char *first, char *last)
 
 void	ft_borders(char c1, char c2)
 {
+	//printf("ft_borders here |%c|%c|\n",c1,c2);
 	if (c1 != '1' || c2 != '1')
 		ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
 }
 
 
+
 int	ft_surrounded(char a, char b, char c , char d)
 {
-	return((a == '1' || a == ' ' || '\0') && (b == '1' || b == ' '|| '\0') && (c == '1' || c == ' '|| '\0') && (d == '1' || d == ' '|| '\0'));
+	printf("  |%c| \n",b);
+	printf("|%c| ",a);
+	printf("|%c|\n",c);
+	printf("  |%c| \n\n",d);
+
+	return((a == '1' || a == ' ') && (b == '1' || b == ' ') && (c == '1' || c == ' ') && (d == '1' || d == ' '));
 }
+
+int ft_surrounded2(char a, char b, char c){
+	return ((a == '1' || a == ' ') && (b == '1' || b == ' ') && (c == '1' || c == ' '));
+}
+
+int ft_surrounded1(char a, char b)
+{
+	return((a == '1' || a == ' ') && (b == '1' || b == ' '));
+}
+
+
+
+
+int ft_each_map_line(char *str)
+{
+	//printf("\nhere|%s|\n",str);
+	int i = -1;
+	while(str[++i])
+	{
+		if ((str[i] < '0' ||  str[i] > '9') && str[i] != ' ')
+		{
+			printf("ft_each_line: thats why o failed|%c|\n",str[i]);
+			return (0);
+		}
+			//failed
+	}
+	return (1);
+}
+
+
 
 
 void	ft_mapvalid(t_data *cubdata)
@@ -290,38 +327,50 @@ void	ft_mapvalid(t_data *cubdata)
 	int i;
 	int j;
 	int	len;
-	char *str;     
+	char *str;
+	int len_j;
+	int len_i;
 
 	i = -1;
 	first_last_line(cubdata->map[0], cubdata->map[cubdata->index]);
-	while(cubdata->map[++i] && i < cubdata->index) // skiped first and last line
+	while(cubdata->map[++i]) 
 	{
+		
 		str = ft_strtrim(cubdata->map[i], " ");
-		// if (!ft_isnumber(str))
-		// 	ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+		if (!ft_each_map_line(cubdata->map[i])) // only numbers
+			ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
 		len = ft_strlen(str) - 1;
-		//printf("|%c|%c|\n",str[0], str[len]);
 		ft_borders(str[0], str[len]);
-		//printf("\n|%s|\n|",cubdata->map[i]);
+		len_j =  ft_strlen(cubdata->map[i]) - 1;
+		len_i = cubdata->index;
 		j = 0;
-		if (i == 0 || i == cubdata->index) 
-					continue;
-		while(cubdata->map[i][j])
+		//printf("|%s|i=%d|j=%d|\n",cubdata->map[i],len_i,len_j);
+		while(cubdata->map[i][j]) // 3 lines
 		{
 			if (cubdata->map[i][j] == ' ')
 			{
-				if (cubdata->map[i][j - 1] && cubdata->map[i - 1][j]
-				&& cubdata->map[i][j + 1] &&  cubdata->map[i + 1][j])
-				{
-					printf("|%c|",cubdata->map[i][j - 1]);
-					printf("%c|",cubdata->map[i - 1][j]);
-					printf("%c|",cubdata->map[i - 1][j]);
-					printf("%c|\n",cubdata->map[i + 1][j]);
-
-					if (!ft_surrounded(cubdata->map[i][j - 1], cubdata->map[i - 1][j], 
-				  cubdata->map[i][j + 1], cubdata->map[i + 1][j]))
-				  	ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
-				}
+				// if (i == 0)
+				// {
+				// 	if (j == 0)
+				// 		ft_surrounded('1','1',cubdata->map[i][j+1],cubdata->map[i+1],)
+				// 	else if (j == len_j)
+				// 	//
+				// 	else 
+				// 	//
+				// }else if (i == len_i)
+				// {
+				// 	if (j == 0)
+				// 	//
+				// 	else if (j == len_j)
+				// 	//
+				// 	else
+				// 	//
+				// }
+				
+					if (!ft_surrounded(cubdata->map[i][j - 1], cubdata->map[i - 1][j],
+					cubdata->map[i][j + 1], cubdata->map[i + 1][j]))
+					  ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+				
 			}
 			j++;
 		}
@@ -694,3 +743,28 @@ void	clear(t_data *cubdata)
 // R 78468 64588
 // R  68554685456564564156431256896 5896
 // ' SO ./pics/pillar.png'
+
+			// if (cubdata->map[i][j] == ' ')
+			// {
+			// 	if ( j == 0 || j == len_j)
+
+
+
+			// 	// 0   j - 1  j + 1 i - 1 j + 1  len
+
+			// 	if (0 <= j + 1 && j + 1 <= len_j && 0 <= j - 1 && j - 1 <= len_j)
+			// 	{
+			// 		// printf("|%s|\n",cubdata->map[i]);
+			// 		// printf("|%c|",cubdata->map[i][j - 1]);
+			// 		// printf("%c|",cubdata->map[i - 1][j]);
+			// 		// printf("%c|",cubdata->map[i - 1][j]);
+			// 		// printf("%c|\n",cubdata->map[i + 1][j]);
+
+			// 		if (!ft_surrounded(cubdata->map[i][j - 1], cubdata->map[i - 1][j], 
+			// 	  cubdata->map[i][j + 1], cubdata->map[i + 1][j]))
+			// 	  {
+			// 		  ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+			// 	  }
+			// 	  	//ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+			// 	}
+			// }

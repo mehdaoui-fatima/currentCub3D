@@ -38,7 +38,7 @@ char *(micub_err[]) =
 	"Missing values,",
 	"Imposter line, ",
 	"No spaces needed at the start of the line, ",
-	"invalid map, ",
+	"Invalid map, ",
 	"Map"
 };
 
@@ -60,6 +60,14 @@ void initializedata(t_data *cubdata)
 	cubdata->sprite = NULL;
 	cubdata->map_len = 0;
 
+}
+
+int	ft_spaces(t_data *cubdata)
+{
+	cubdata->spaces = 0;
+	while(cubdata->line[cubdata->spaces] == ' ')
+		cubdata->spaces++;
+	return(cubdata->spaces);
 }
 
 int ft_len(char **newline)
@@ -239,137 +247,86 @@ void	ft_textures(t_data *cubdata)
 // map valid **********************************
 
 
-// void	ft_map_line(char *line, int *pos)
-// {
-// 	int i = 0;
-// 	while(line[i])
-
-
-
-
-
-
-void ft_map_line(char *map_line, int *i)
+void first_last_line(char *first, char *last)
 {
-	int j = 0;
+	int i;
+	int j;
 
-	while (map_line[j])
+	i = 0;
+	j = 0;
+	while(first[i] || last[j])
 	{
-		printf ("|%c|\n\n",map_line[j]);
-		if (*i == 0 && (map_line[j] != '1' || map_line[j] != ' '))
+		if (first[i])
 		{
-			printf ("%c\n\n",map_line[j]);
-			ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+			if (first[i] != '1' && first[i] != ' ')
+				ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+			i++;
 		}
-		j++;
-
+		else if (last[j])
+		{
+			if (last[j] != '1' && last[j] != ' ')
+				ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+			j++;
+		}
 	}
-	
-
-
-
 }
 
 
+void	ft_borders(char c1, char c2)
+{
+	if (c1 != '1' || c2 != '1')
+		ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+}
 
 
-
-
-
+int	ft_surrounded(char a, char b, char c , char d)
+{
+	return((a == '1' || a == ' ' || '\0') && (b == '1' || b == ' '|| '\0') && (c == '1' || c == ' '|| '\0') && (d == '1' || d == ' '|| '\0'));
+}
 
 
 void	ft_mapvalid(t_data *cubdata)
 {
-	int i = 0;
-	int j = 0;
+	int i;
+	int j;
+	int	len;
 	char *str;
-	
-	
 
-
-
-	while(cubdata->map[i])
+	i = -1;
+	first_last_line(cubdata->map[0], cubdata->map[cubdata->index]);
+	while(cubdata->map[++i] && i < cubdata->index) // skiped first and last line
 	{
 		str = ft_strtrim(cubdata->map[i], " ");
-		ft_map_line(str, &i);
+		// if (!ft_isnumber(str))
+		// 	ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+		len = ft_strlen(str) - 1;
+		//printf("|%c|%c|\n",str[0], str[len]);
+		ft_borders(str[0], str[len]);
+		//printf("\n|%s|\n|",cubdata->map[i]);
+		j = 0;
+		if (i == 0 || i == cubdata->index)
+					continue;
+		while(cubdata->map[i][j])
+		{
+			if (cubdata->map[i][j] == ' ')
+			{
+				if (cubdata->map[i][j - 1] && cubdata->map[i - 1][j]
+				&& cubdata->map[i][j + 1] &&  cubdata->map[i + 1][j])
+				{
+					printf("|%c|",cubdata->map[i][j - 1]);
+					printf("%c|",cubdata->map[i - 1][j]);
+					printf("%c|",cubdata->map[i - 1][j]);
+					printf("%c|\n",cubdata->map[i + 1][j]);
 
-		// while (cubdata->map[i][j])
-		// {
-
-			
-
-
-		// 	j++;
-		// }
-		i++;
+					if (!ft_surrounded(cubdata->map[i][j - 1], cubdata->map[i - 1][j], 
+				  cubdata->map[i][j + 1], cubdata->map[i + 1][j]))
+				  	ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+				}
+			}
+			j++;
+		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// int i = 0;
-	// int j;
-	// int len;
-
-	// //printf("%d\n\n\n",cubdata->index);
-	// while(cubdata->map[i])
-	// { 
-	// 	len = ft_strlen(cubdata->map[i]) - 1;
-	// 	j = 0;
-	// 	while (cubdata->map[i][j])
-	// 	{
-	// 		ft_strtrim(cubdata->map[i], " ");
-			
-	// 		else if (i == 0 && cubdata->map[i][j] != '1')
-	// 		{
-	// 			printf("-error |%s|%c||%c|\n", cubdata->map[i],cubdata->map[i][j],cubdata->map[i][len]);
-	// 			ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
-	// 		}
-	// 		else if (i == cubdata->index && cubdata->map[i][j] != '1')
-	// 		{
-	// 			printf("+error |%s|%c||%c|\n", cubdata->map[i],cubdata->map[i][j],cubdata->map[i][len]);
-	// 			ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
-	// 		}else 
-	// 		{
-	// 			if (cubdata->map[i][start] != '1' || cubdata->map[i][len] != '1')
-	// 			{
-	// 				printf("|%c|%c|\n",cubdata->map[i][start],cubdata->map[i][len]);
-	// 				ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
-	// 			}
-
-	// 		}
-	// 		j++;
-	// 	}
-	// 	i++;
-	// }
-	//printf("|%s|\n",cubdata->map[i]);
-
 }
-
-
 
 
 // map ******************************************************
@@ -461,14 +418,6 @@ void	ft_map(t_data *cubdata)
 // parsing  **************************************************
 
 
-
-int	ft_spaces(t_data *cubdata)
-{
-	cubdata->spaces = 0;
-	while(cubdata->line[cubdata->spaces] == ' ')
-		cubdata->spaces++;
-	return(cubdata->spaces);
-}
 
 
 t_data *parsing(t_data *cubdata, char *argv)

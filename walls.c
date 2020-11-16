@@ -1,8 +1,6 @@
 
 #include "cub3d.h"
 
-
-
 int worldMap[mapWidth][mapHeight]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},

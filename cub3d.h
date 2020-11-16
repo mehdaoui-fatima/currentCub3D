@@ -134,6 +134,7 @@ typedef struct s_data{
   int spaces;
   char **map;
   int map_len;
+  int max_len;// max len 
 }				t_data;
 
 

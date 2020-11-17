@@ -247,35 +247,47 @@ void	ft_textures(t_data *cubdata)
 //TODO you were here
 void	ft_add_zero(char *str, int len_added, int len)
 {
-	printf("|%s|%d|\n",str,len_added);
-	while(len < len_added)
-	{
-		str[len]
+	printf("|%s|\n",str);
+	printf("|%d|\n",len_added);
+	printf("|%d|\n\n\n\n",len);
 
+	while(len_added > 0)
+	{
+		str[len] = ' ';
+		//printf("%c\n",str[len]);
+		len_added--;
 		len++;
 	}
-
-
+	str[len] = '\0';
+	//exit(0);
 }
-
 
 void	ft_new_map(t_data *cubdata)
 {
-	//cubdata->max_len;
-	//cubdata->index + 1;
 	int i = -1;
-	char **new_map;
 	int len;
+	char *s;
 
-	new_map = (char**)malloc((cubdata->index + 2) * sizeof(char*));
-	new_map[cubdata->index] = NULL;
-	while (++i <= cubdata->index)
+	cubdata->new_map = (char**)malloc(sizeof(char*) * (cubdata->index + 2));
+	cubdata->new_map[cubdata->index + 1]  =  NULL;
+	while (cubdata->map[++i])
 	{
-		new_map[i] =  ft_strdup(cubdata->map[i]);
-		len = ft_strlen(new_map[i]);
-		ft_add_zero(new_map[i],cubdata->max_len - len, len);
 		
+		len = ft_strlen(cubdata->map[i]);
+		s = (char*)malloc(sizeof(char) * (cubdata->max_len - len + 1));
+		s[cubdata->max_len - len ] = '\0';
+		ft_memset(s,32,cubdata->max_len - len);
+		cubdata->new_map[i] =  ft_strjoin(cubdata->map[i],s);
 	}
+
+	int l = 0;
+	while(cubdata->new_map[l])
+	{
+		printf("--|%s|\n",cubdata->new_map[l]);
+		l++;
+
+	}
+	printf("map ended\n\n");
 //	printf("%d------------\n\n\n\n\n\n",cubdata->index);
 }
 
@@ -337,7 +349,6 @@ int ft_each_map_line(char *str)
 	return (1);
 }
 
-
 void	ft_mapvalid(t_data *cubdata)
 {
 	int i;
@@ -358,44 +369,44 @@ void	ft_mapvalid(t_data *cubdata)
 	b = '1';
 	c = '1';
 	d = '1';
-	// if (cubdata->index < 3)
-	// 	ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
-	first_last_line(cubdata->map[0], cubdata->map[cubdata->index]);
-	while(cubdata->map[++i]) 
+	if (cubdata->index < 3)
+		ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+	first_last_line(cubdata->new_map[0], cubdata->new_map[cubdata->index]);
+	while(cubdata->new_map[++i]) 
 	{
 		
-		str = ft_strtrim(cubdata->map[i], " ");
-		if (!ft_each_map_line(cubdata->map[i])) // only numbers
+		str = ft_strtrim(cubdata->new_map[i], " ");
+		if (!ft_each_map_line(cubdata->new_map[i])) // only numbers
 			ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
 		len = ft_strlen(str) - 1;
 		ft_borders(str[0], str[len]);
-		len_j =  ft_strlen(cubdata->map[i]) - 1;
+		len_j =  ft_strlen(cubdata->new_map[i]) - 1;
 		len_i = cubdata->index;
 		j = 0;
-		//printf("|%s|i=%d|j=%d|\n",cubdata->map[i],len_i,len_j);
-		while(cubdata->map[i][j]) // 3 lines
+		//printf("|%s|i=%d|j=%d|\n",cubdata->new_map[i],len_i,len_j);
+		while(cubdata->new_map[i][j]) // 3 lines
 		{
-			if (cubdata->map[i][j] == ' ')
+			if (cubdata->new_map[i][j] == ' ')
 			{
 				if (0 <= j - 1  && j - 1 <= len_j)
-					a = cubdata->map[i][j - 1];
+					a = cubdata->new_map[i][j - 1];
 				if (0 <= j + 1 && j + 1 <= len_j)
-					c = cubdata->map[i][j + 1];
+					c = cubdata->new_map[i][j + 1];
 				if (0 <= i - 1 && i-1  <= len_i )
 				{
-					len_previous = ft_strlen(cubdata->map[i - 1]) - 1;
+					len_previous = ft_strlen(cubdata->new_map[i - 1]) - 1;
 					if (len_previous < j)
 						b = '1';
 					else 
-						b = cubdata->map[i - 1][j];
+						b = cubdata->new_map[i - 1][j];
 				}
 				if (0 <= i + 1 && i + 1 <= len_i) // line exists
 				{
-					len_next= ft_strlen(cubdata->map[i+1]) - 1;
+					len_next= ft_strlen(cubdata->new_map[i+1]) - 1;
 					if (len_next < j)
 						d = '1';
 					else
-						d = cubdata->map[i + 1][j];
+						d = cubdata->new_map[i + 1][j];
 				}
 				if (!ft_surrounded(a,b,c,d))
 					ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
@@ -421,19 +432,19 @@ int	ft_missingdata(t_data *cubdata)
 	//0 missing 
 }
 
-void	ft_clear(char **tmp)
-{
-	int i;
+// void	ft_clear(char **tmp)
+// {
+// 	int i;
 
-	i = 0;
-	while(tmp[i])
-	{
-		free(tmp[i]);
-		i++;
-	}
-	free(tmp);
-	tmp = NULL;
-}
+// 	i = 0;
+// 	while(tmp[i])
+// 	{
+// 		free(tmp[i]);
+// 		i++;
+// 	}
+// 	free(tmp);
+// 	tmp = NULL;
+// }
 
 void	ft_addrow(char **tmp, t_data *cubdata)
 {
@@ -448,7 +459,7 @@ void	ft_addrow(char **tmp, t_data *cubdata)
 	tmp[cubdata->index + 1] = NULL;
 	cubdata->max_len = (cubdata->max_len < (res = ft_strlen(cubdata->line))) ? res : cubdata->max_len;
 	//printf("********%d*******\n",cubdata->max_len);
-	free(cubdata->map);
+	//free(cubdata->map);
 	cubdata->map = tmp;
 }
 
@@ -546,7 +557,7 @@ t_data *parsing(t_data *cubdata, char *argv)
 // int k = 0;	
 // 	while(cubdata->map[k])
 // 	{
-// 		printf("-%d|%s|\n",k,cubdata->map[k]);
+// 		printf("\n-%d|%s|\n",k,cubdata->map[k]);
 // 		k++;
 // 	}	
 
@@ -933,4 +944,32 @@ void	ft_mapvalid(t_data *cubdata)
 		}
 	}
 }
+*/
+/*
+1111111111
+1000000001111111
+1000000001      111111
+1111111111           1
+111                  1                  1
+1111111111111111111111
+1000000001
+1000000001
+1111111111
+
+
+
+
+
+
+             111111111
+             1000000011111111
+             111100000000001111111
+       1111110000000000111111111111111
+       1111111111100011111000011111111
+       11111110000000000000000000001
+       11111110000000000000000000001
+       11111110000000000000000000001
+       11111110000000000000000000001
+       111111100000000000000011111111111 1
+       1111111111111111111111111111
 */

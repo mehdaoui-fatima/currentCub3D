@@ -135,6 +135,7 @@ typedef struct s_data{
   char **map;
   int map_len;
   int max_len;// max len 
+  char **new_map;
 }				t_data;
 
 

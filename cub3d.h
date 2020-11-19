@@ -106,8 +106,6 @@ typedef struct s_cub3d{
 }				t_cub3d;
 
 
-
-
 // used to parse map.cub
 typedef struct s_data{
   char *line;
@@ -136,6 +134,8 @@ typedef struct s_data{
   int map_len;
   int max_len;// max len 
   char **new_map;
+  t_cub3d cub3d;
+  
 }				t_data;
 
 

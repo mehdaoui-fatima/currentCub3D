@@ -1,32 +1,17 @@
 
 #include "cub3d.h"
 
-int worldMap[mapWidth][mapHeight]=
+int worldMap[9][10]=
 {
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1},
-  {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1},
-  {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,1,0,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+  {1,1,1,1,1,1,1,1,1,1},
+  {1,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,1},//
+  {1,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,1},
+  {1,1,1,1,1,1,1,1,1,1}
 };
 
 
@@ -34,15 +19,19 @@ int worldMap[mapWidth][mapHeight]=
 void	texture(t_cub3d *cub3d)
 {
 
+	// W 
 	cub3d->texture[0].image_ptr = mlx_png_file_to_image(cub3d->connection, "./pics/colorstone.png", &cub3d->texture[0].w, &cub3d->texture[0].h);
 	cub3d->texture[0].data = (int*)mlx_get_data_addr(cub3d->texture[0].image_ptr, &(cub3d->texture[0].bpp), &(cub3d->texture[0].size),&(cub3d->texture[0].endian));
 	
+	//E
 	cub3d->texture[1].image_ptr = mlx_png_file_to_image(cub3d->connection, "./pics/wood.png", &cub3d->texture[1].w, &cub3d->texture[1].h);
 	cub3d->texture[1].data = (int*)mlx_get_data_addr(cub3d->texture[1].image_ptr, &(cub3d->texture[1].bpp), &(cub3d->texture[1].size),&(cub3d->texture[1].endian));
 
+	//north 
 	cub3d->texture[2].image_ptr = mlx_png_file_to_image(cub3d->connection, "./pics/mossy.png", &cub3d->texture[2].w, &cub3d->texture[2].h);
 	cub3d->texture[2].data = (int*)mlx_get_data_addr(cub3d->texture[2].image_ptr, &(cub3d->texture[2].bpp), &(cub3d->texture[2].size),&(cub3d->texture[2].endian));
 	
+	// South
 	cub3d->texture[3].image_ptr = mlx_png_file_to_image(cub3d->connection, "./pics/bluestone.png", &cub3d->texture[3].w, &cub3d->texture[3].h);
 	cub3d->texture[3].data = (int*)mlx_get_data_addr(cub3d->texture[3].image_ptr, &(cub3d->texture[3].bpp), &(cub3d->texture[3].size),&(cub3d->texture[3].endian));
 }

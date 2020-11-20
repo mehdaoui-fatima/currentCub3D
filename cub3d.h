@@ -25,18 +25,18 @@
 #include "./minilibx/mlx_png.h"
 
 
-#define mapWidth 24
-#define mapHeight 24
-#define screenWidth 1200
-#define screenHeight 1200
+
+
 #define texWidth 64
 #define texHeight 64
 #define max_width 1024
 #define max_height 768
-#define move_right 2
-#define move_left 0
+#define rot_right 124
+#define rot_left 123
 #define move_towards 13
 #define move_backwards 1
+#define move_right 2
+#define move_left 0
 #define exit_ 53
 
 
@@ -94,15 +94,17 @@ typedef struct s_cub3d{
     int drawStart ;
     int drawEnd;
     int change;
-   int plus;//for lookup lookdown
-   int jump;//too jump
-   int jumpback;//how much we will jump
-   char *path;
-   double wallx;
-   int texx;
-  double  step;
-  double  texpos;
-  int  texy;
+    int plus;//for lookup lookdown
+    int jump;//too jump
+    int jumpback;//how much we will jump
+    char *path;
+    double wallx;
+    int texx;
+    double  step;
+    double  texpos;
+    int  texy;
+    int screenHeight;
+    int screenWidth;
 }				t_cub3d;
 
 
@@ -134,17 +136,21 @@ typedef struct s_data{
   int map_len;
   int max_len;// max len 
   char **new_map;
+  int  **worldMap;
+  int ceilColor;
+  int floorColor;
   t_cub3d cub3d;
   
 }				t_data;
 
 
-t_cub3d     *initialize(t_cub3d  *cub3d);//init cub3d
+t_data      *initialize(t_data *cubdata);//init cub3d
 t_data      *parsing(t_data *cubdata, char *argv); //parsing .cub
-void        draw_wall(t_cub3d *cub3d);// drawing walls
-int         ft_key_press(int keycode, t_cub3d *cub3d);//to be able to used by main
-void        texture(t_cub3d *cub3d);
+void        draw_wall(t_data *cubdata);// drawing walls
+int         ft_key_press(int keycode, t_data *cubdata);//to be able to used by main
+void        texture(t_data *cubdata);
 
+//int draw_screen(t_data *cubdata);
 
 
 

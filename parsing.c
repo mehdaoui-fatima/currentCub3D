@@ -113,7 +113,19 @@ void	ft_errors(char *error, char *str)
 
 
 
+void ft_free(char **s)
+{
+	int i;
 
+	i = -1;
+	while(s[++i])
+	{
+		free(s[i]);
+		s[i] = NULL;
+	}
+	s = NULL;
+
+}
 
 
 
@@ -149,6 +161,7 @@ void	resolution(t_data *cubdata)
 	}
 	else
 		ft_errors(micub_err[INVALID_LINE], micub_err[RESOLUTION]);
+	ft_free(cubdata->newline);
 }
 
 
@@ -227,6 +240,8 @@ void    ft_ceil_floor(t_data *cubdata)
 		ft_errors(micub_err[INVALID_LINE], micub_err[MAP_FILE]);
 	cubdata->ceilColor = create_rgb(cubdata->cr, cubdata->cg, cubdata->cb);
 	cubdata->floorColor =  create_rgb(cubdata->fr, cubdata->fg, cubdata->fb);
+	ft_free(cubdata->newline);
+	ft_free(cubdata->new);
 }
 
 
@@ -263,7 +278,9 @@ char	*ft_each_texture(char *path, t_data *cubdata)
 	else if ((fd = open(cubdata->newline[1], O_RDONLY)) == -1)
 		ft_errors(micub_err[INVALID_PATH], micub_err[TEXTURE]);
 
-	path = cubdata->newline[1];
+	path = ft_strdup(cubdata->newline[1]);
+	//printf("%s\n",path);
+	ft_free(cubdata->newline);
 	return (path);
 }
 
@@ -286,6 +303,7 @@ void	ft_textures(t_data *cubdata)
 		cubdata->sprite = ft_each_texture(cubdata->sprite, cubdata);
 	else
 		ft_errors(micub_err[INVALID_LINE], micub_err[TEXTURE]);
+	
 }
 
 
@@ -323,9 +341,9 @@ void	ft_create_worldMap(t_data *cubdata)
 		{
 			if (cubdata->new_map[i][j] == '2')
 			{
-				cubdata->sprites[k].x = i + 0.1;
-				cubdata->sprites[k].y = j + 0.1;
-				printf("\nposx:%d posy:%d\n",cubdata->sprites[k].x, cubdata->sprites[k].y);
+				cubdata->sprites[k].x = i + 0.5;
+				cubdata->sprites[k].y = j + 0.5;
+			//	printf("\nposx:%d posy:%d\n",cubdata->sprites[k].x, cubdata->sprites[k].y);
 				k++;
 			}
 			if (cubdata->new_map[i][j] == ' ')
@@ -375,13 +393,19 @@ void first_last_line(char *first, char *last)
 		if (first[i])
 		{
 			if (first[i] != '1' && first[i] != ' ')
-				ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+			{
+				printf("first line map here\n");
+		        ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+			}
 			i++;
 		}
 		else if (last[j])
 		{
 			if (last[j] != '1' && last[j] != ' ')
-				ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+				{
+					printf("last line map here\n");
+					ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+				}
 			j++;
 		}
 	}
@@ -390,7 +414,12 @@ void first_last_line(char *first, char *last)
 void	ft_borders(char c1, char c2)
 {
 	if (c1 != '1' || c2 != '1')
+	{
+
+		printf("--+-+-+-+-+-+-+here|%c|%c|\n",c1,c2);
 		ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+	}
+		
 }
 
 int	ft_surrounded(char a, char b, char c , char d)
@@ -493,18 +522,18 @@ void	ft_mapvalid(t_data *cubdata)
 	
 	if (cubdata->index < 2 )
 	{
-		printf("here\n");
+		printf("++++++++++here index %d\n",cubdata->index);
 		ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
 	}
 		//ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
 	first_last_line(cubdata->new_map[0], cubdata->new_map[cubdata->index]);
 	while(cubdata->new_map[++i]) 
 	{
-		
+		//printf("|%s|\n",cubdata->new_map[i]);
 		str = ft_strtrim(cubdata->new_map[i], " ");
 		if (!ft_each_map_line(cubdata->new_map[i], i, cubdata)) // only numbers
 		{
-			printf("here\n");
+			printf("----->>>>>>here\n");
 			ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
 		}	
 		len = ft_strlen(str) - 1;
@@ -538,7 +567,12 @@ void	ft_mapvalid(t_data *cubdata)
 						d = cubdata->new_map[i + 1][j];
 				}
 				if (!ft_surrounded(a,b,c,d))
+				{
+					printf("----here\n");
+					
 					ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+				}
+					
 			}
 			j++;
 		}
@@ -599,16 +633,27 @@ void	ft_addrow(char **tmp, t_data *cubdata)
 	tmp[cubdata->index + 1] = NULL;
 	cubdata->max_len = (cubdata->max_len < (res = ft_strlen(cubdata->line))) ? res : cubdata->max_len;
 	//printf("********%d*******\n",cubdata->max_len);
-	//free(cubdata->map);
+	//free(cubdata->line);
+	printf("%d\n\n\n",ft_len(cubdata->map));
+	int k = 0;
+	while(cubdata->map[k])
+	{
+		printf("|%s|\n",cubdata->map[k]);
+		k++;
+	}
+	free(cubdata->map);
 	cubdata->map = tmp;
+
 }
 
 void	ft_map(t_data *cubdata)
 {
 	char **tmp;
 	int true;
+	int i;
 	
 	true = 1;
+
 
 	//printf("ft_map() called\n%s",cubdata->line);
 	if (!ft_missingdata(cubdata))
@@ -624,10 +669,19 @@ void	ft_map(t_data *cubdata)
 		//printf("--------%d---------\n",cubdata->max_len);
 		cubdata->map[1] = NULL;
 		true = 0;
+		//printf("|%s|\n",cubdata->line);
+		free(cubdata->line);
 	}
 	while ((cubdata->r = get_next_line(cubdata->fd,&(cubdata->line))) == 1)
+	{
 		ft_addrow(tmp, cubdata);
+
+		//free(cubdata->line);
+		//printf("|%s|\n",cubdata->line);
+		//cubdata->line = NULL;
+	}	
 	ft_addrow(tmp, cubdata);
+	//free(cubdata->line);
 	ft_new_map(cubdata);
 	ft_mapvalid(cubdata);
 	// missing values in map should be in a function
@@ -687,6 +741,7 @@ t_data *parsing(t_data *cubdata, char *argv)
 			//printf("|%s|\n",cubdata->line);
 			ft_errors (micub_err[IMPOSTER], micub_err[MAP_FILE]);
 		}
+		free(cubdata->line);
 		//printf("%c\n",r);
 			
 	}//only one line left befor EOF 

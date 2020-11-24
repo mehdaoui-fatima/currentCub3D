@@ -45,7 +45,7 @@ void draw_sprites(t_data *cubdata)
 		cubdata->sprites[i].spriteorder = i;
 		cubdata->sprites[i].spritedistance = ((cubdata->cub3d.posx - cubdata->sprites[i].x) * (cubdata->cub3d.posx - cubdata->sprites[i].x)) 
 		+ ((cubdata->cub3d.posy - cubdata->sprites[i].y)*(cubdata->cub3d.posy - cubdata->sprites[i].y));
-		printf("distance:%d %d\n",cubdata->sprites[i].x,cubdata->sprites[i].y);
+		//printf("distance:%d %d\n",cubdata->sprites[i].x,cubdata->sprites[i].y);
 	}
 	tri(cubdata);
 	for(int i = 0; i < cubdata->cub3d.numsprites; i++)

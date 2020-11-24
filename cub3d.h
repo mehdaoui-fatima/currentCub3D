@@ -163,6 +163,8 @@ void        draw_wall(t_data *cubdata);// drawing walls
 int         ft_key_press(int keycode, t_data *cubdata);//to be able to used by main
 void        texture(t_data *cubdata);
 void        draw_sprites(t_data *cubdata);
+void        ft_free(char **s);
+
 
 //int draw_screen(t_data *cubdata);
 

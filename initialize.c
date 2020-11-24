@@ -52,7 +52,7 @@ t_data      *initialize(t_data *cubdata)
 	cubdata->cub3d.hit = 0;
 	cubdata->cub3d.mapx = (int)(cubdata->cub3d.posx);
 	cubdata->cub3d.mapy= (int)(cubdata->cub3d.posy);
-	cubdata->cub3d.movespeed = 7;
+	cubdata->cub3d.movespeed = 5;
 	cubdata->cub3d.rotspeed = 0.2;
 	cubdata->cub3d.img.h = -1;
 	cubdata->cub3d.img.w = -1;

@@ -56,6 +56,13 @@ typedef struct s_img
 } t_img;
 
 
+typedef struct s_sprite
+{
+  double x;
+  double y;
+  int spriteorder;
+  double spritedistance;
+} t_sprite;
 
 
 typedef struct s_cub3d{
@@ -69,7 +76,7 @@ typedef struct s_cub3d{
 
     double plany;
     double cx;    //camera cordinate x
-    double x;     // counter 
+    double x;     // counter //changed when try to do sprites double->int
     double raydirx;  // ray coordinate
     double raydiry;
     int mapx;
@@ -105,6 +112,9 @@ typedef struct s_cub3d{
     int  texy;
     int screenHeight;
     int screenWidth;
+    int numsprites;
+    double *zbuffer;
+    
 }				t_cub3d;
 
 
@@ -140,7 +150,10 @@ typedef struct s_data{
   int ceilColor;
   int floorColor;
   t_cub3d cub3d;
-  
+  t_sprite *sprites;
+
+
+
 }				t_data;
 
 
@@ -149,6 +162,7 @@ t_data      *parsing(t_data *cubdata, char *argv); //parsing .cub
 void        draw_wall(t_data *cubdata);// drawing walls
 int         ft_key_press(int keycode, t_data *cubdata);//to be able to used by main
 void        texture(t_data *cubdata);
+void        draw_sprites(t_data *cubdata);
 
 //int draw_screen(t_data *cubdata);
 

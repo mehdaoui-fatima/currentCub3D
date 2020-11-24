@@ -32,6 +32,14 @@ int main(int argc, char **argv)
 		// cubdata.cub3d.posx, cubdata.cub3d.posy, cubdata.cub3d.dirx, cubdata.cub3d.diry,
 		// cubdata.cub3d.planx, cubdata.cub3d.plany);
 		//printf("from file parcig: %f %f\n",cubdata.cub3d.posx,cubdata.cub3d.posy);
+		// int i = 0;
+		// while(i<33)
+		// {
+		// 	printf("{%d,%d}\n",cubdata.sprites[i].x, cubdata.sprites[i].y);
+
+		// 	i++;
+		// }
+		//printf("%d\n",cubdata.numsprites);
 		cubdata.cub3d.connection = mlx_init();
 		texture(&cubdata);
 		cubdata.cub3d.window = mlx_new_window(cubdata.cub3d.connection, cubdata.rx, cubdata.ry, "Cub3D");

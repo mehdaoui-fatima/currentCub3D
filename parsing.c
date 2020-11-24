@@ -64,7 +64,7 @@ void initializedata(t_data *cubdata)
 	cubdata->map_len = 0;
 	cubdata->cub3d.posx = -1;
 	cubdata->cub3d.posy = -1;
-	
+	cubdata->cub3d.numsprites = 0;
 }
 
 int	ft_spaces(t_data *cubdata)
@@ -305,20 +305,29 @@ void	ft_textures(t_data *cubdata)
 
 void	ft_create_worldMap(t_data *cubdata)
 {
+	//printf("|%c|\n",cubdata->new_map[0][0]);
 	int i;
 	int j;
+	int k;
 	int len;
 
 	i = -1;
+	k = 0;
 	cubdata->worldMap = (int**)malloc(sizeof(int*) * (cubdata->index + 1));
 	//printf("\n\n\n%d\n\n\n",cubdata->index);
 	while(cubdata->new_map[++i])
 	{
 		cubdata->worldMap[i] = (int*)malloc(sizeof(int) * cubdata->max_len);
 		j = -1;
-		//printf("\n|");
 		while(cubdata->new_map[i][++j])
 		{
+			if (cubdata->new_map[i][j] == '2')
+			{
+				cubdata->sprites[k].x = i + 0.1;
+				cubdata->sprites[k].y = j + 0.1;
+				printf("\nposx:%d posy:%d\n",cubdata->sprites[k].x, cubdata->sprites[k].y);
+				k++;
+			}
 			if (cubdata->new_map[i][j] == ' ')
 				cubdata->worldMap[i][j] = 1;
 			else if (ft_isalpha((int)cubdata->new_map[i][j]))
@@ -413,11 +422,14 @@ void ft_dir_plan(t_data *cubdata, double *tab)
 
 int ft_each_map_line(char *str, int index, t_data *cubdata)
 {
+	//cubdata->sprite[0] = {x,y} ex
 	int tab[4];
 	int i = -1;
+	int j = 0;
 
 	while(str[++i])
 	{
+		//printf("%d\n",index);
 		if (str[i] != '2' && str[i] != '1' && str[i] != ' ' && str[i] != '0' &&
 		str[i] != 'N' && str[i] != 'W' && str[i] != 'E' && str[i] != 'S')
 		{
@@ -428,8 +440,9 @@ int ft_each_map_line(char *str, int index, t_data *cubdata)
 		{
 			if (cubdata->cub3d.posy != -1)
 				ft_errors(micub_err[DIR], micub_err[MAP]);
-			cubdata->cub3d.posx = index + 0.5; // to avoid spawn in the wall 
-			cubdata->cub3d.posy = i + 0.5;
+			cubdata->cub3d.posx = index + 0.1; // to avoid spawn in the wall 0.5 should be added
+			cubdata->cub3d.posy = i + 0.1;
+			printf("\n\n from parsing:  posx:%f,posy:%f\n\n",cubdata->cub3d.posx,cubdata->cub3d.posy);
 			//printf("\n\n\nft_each line %f %f\n\n\n",cubdata->cub3d.posy,cubdata->cub3d.posx);
 			if (str[i] == 'N')
 				ft_dir_plan(cubdata, create_dir_plan(-1,0,0,0.66));
@@ -440,7 +453,18 @@ int ft_each_map_line(char *str, int index, t_data *cubdata)
 			else if (str[i] == 'E')
 				ft_dir_plan(cubdata, create_dir_plan(0,1,0.66,0));
 		}
+		if (str[i] == '2')
+			cubdata->cub3d.numsprites++;
 	}
+	
+
+	
+
+
+
+
+
+
 	return (1);
 }
 
@@ -466,6 +490,7 @@ void	ft_mapvalid(t_data *cubdata)
 	b = '1';
 	c = '1';
 	d = '1';
+	
 	if (cubdata->index < 2 )
 	{
 		printf("here\n");
@@ -478,7 +503,10 @@ void	ft_mapvalid(t_data *cubdata)
 		
 		str = ft_strtrim(cubdata->new_map[i], " ");
 		if (!ft_each_map_line(cubdata->new_map[i], i, cubdata)) // only numbers
+		{
+			printf("here\n");
 			ft_errors(micub_err[INVALID_MAP], micub_err[MAP]);
+		}	
 		len = ft_strlen(str) - 1;
 		ft_borders(str[0], str[len]);
 		len_j =  ft_strlen(cubdata->new_map[i]) - 1;
@@ -515,6 +543,8 @@ void	ft_mapvalid(t_data *cubdata)
 			j++;
 		}
 	}
+	printf("\n----num sprite:%d\n",cubdata->cub3d.numsprites);
+	cubdata->sprites = (t_sprite*)malloc(sizeof(t_sprite) * cubdata->cub3d.numsprites);
 	ft_create_worldMap(cubdata);
 }
 
@@ -651,7 +681,7 @@ t_data *parsing(t_data *cubdata, char *argv)
 		else if  (r == '1')
 		{
 			ft_map(cubdata);
-		}			
+		}	
 		else
 		{
 			//printf("|%s|\n",cubdata->line);

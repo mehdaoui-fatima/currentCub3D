@@ -50,7 +50,9 @@ int main(int argc, char **argv)
 		mlx_hook(cubdata.cub3d.window, 2, 0, ft_key_press, &cubdata);
 		mlx_hook(cubdata.cub3d.window, 17, 0, ft_key_press, &cubdata);
 		//mlx_loop_hook(cubdata.cub3d.connection, draw_screen, &cubdata);
+		//ft_free((char**)cubdata.worldMap);
 		mlx_loop(cubdata.cub3d.connection);
+		
 	}
 	return (0);
 }

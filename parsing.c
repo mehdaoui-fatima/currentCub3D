@@ -119,12 +119,9 @@ void ft_free(char **s)
 
 	i = -1;
 	while(s[++i])
-	{
 		free(s[i]);
-		s[i] = NULL;
-	}
-	s = NULL;
-
+	if (s)
+		free(s);
 }
 
 
@@ -356,6 +353,9 @@ void	ft_create_worldMap(t_data *cubdata)
 		}
 		//printf("|");
 	}
+	//printf("\n\n%d\n\n",ft_len(cubdata->new_map));
+	ft_free(cubdata->new_map);
+	//printf("\n\n%d\n\n",ft_len(cubdata->new_map));
 	//printf("%d ",i);
 }
 
@@ -376,8 +376,9 @@ void	ft_new_map(t_data *cubdata)
 		s[cubdata->max_len - len ] = '\0';
 		ft_memset(s,32,cubdata->max_len - len);
 		cubdata->new_map[i] =  ft_strjoin(cubdata->map[i],s);
-		//printf("--%s--\n", cubdata->new_map[i]);
 		free(s);
+		//s = NULL;
+		//printf("--%s--\n", cubdata->new_map[i]);
 	}
 }
 
@@ -485,15 +486,6 @@ int ft_each_map_line(char *str, int index, t_data *cubdata)
 		if (str[i] == '2')
 			cubdata->cub3d.numsprites++;
 	}
-	
-
-	
-
-
-
-
-
-
 	return (1);
 }
 
@@ -620,17 +612,17 @@ int	ft_missingdata(t_data *cubdata)
 }
 
 
-void	ft_addrow(char **tmp, t_data *cubdata)
+void	ft_addrow(t_data *cubdata)
 {
 	int res;
 
-	tmp = (char**)malloc((cubdata->map_len = ft_len(cubdata->map) + 2)*sizeof(char*));
+	cubdata->tmp = (char**)malloc((cubdata->map_len = ft_len(cubdata->map) + 2)*sizeof(char*));
 	cubdata->index = -1;
 	//printf("map_len%d\n",cubdata->map_len);
 	while(cubdata->map[++cubdata->index]) //0
-		tmp[cubdata->index] = cubdata->map[cubdata->index];
-	tmp[cubdata->index] = cubdata->line;
-	tmp[cubdata->index + 1] = NULL;
+		cubdata->tmp[cubdata->index] = cubdata->map[cubdata->index];
+	cubdata->tmp[cubdata->index] = cubdata->line;
+	cubdata->tmp[cubdata->index + 1] = NULL;
 	cubdata->max_len = (cubdata->max_len < (res = ft_strlen(cubdata->line))) ? res : cubdata->max_len;
 	//printf("********%d*******\n",cubdata->max_len);
 	//free(cubdata->line);
@@ -642,19 +634,21 @@ void	ft_addrow(char **tmp, t_data *cubdata)
 		k++;
 	}
 	free(cubdata->map);
-	cubdata->map = tmp;
-
+	//cubdata->map = (char**)malloc(sizeof(char*)*1);
+	cubdata->map = cubdata->tmp;
+	
+	//printf("*********%d******\n");
 }
 
 void	ft_map(t_data *cubdata)
 {
-	char **tmp;
+	
 	int true;
 	int i;
 	
 	true = 1;
 
-
+	i = 3;
 	//printf("ft_map() called\n%s",cubdata->line);
 	if (!ft_missingdata(cubdata))
 	{
@@ -674,13 +668,20 @@ void	ft_map(t_data *cubdata)
 	}
 	while ((cubdata->r = get_next_line(cubdata->fd,&(cubdata->line))) == 1)
 	{
-		ft_addrow(tmp, cubdata);
-
-		//free(cubdata->line);
+		ft_addrow(cubdata);
+		// if (cubdata->line)
+		// 	free(cubdata->line);
+		// while (i == 3)
+		// {
+		// 	free(cubdata->line);
+		// 	cubdata->line = NULL;
+		// 	i = 2;
+		// }
+			
 		//printf("|%s|\n",cubdata->line);
 		//cubdata->line = NULL;
 	}	
-	ft_addrow(tmp, cubdata);
+	ft_addrow(cubdata);
 	//free(cubdata->line);
 	ft_new_map(cubdata);
 	ft_mapvalid(cubdata);
@@ -688,6 +689,7 @@ void	ft_map(t_data *cubdata)
 	if (cubdata->cub3d.posy == -1)
 		ft_errors(micub_err[MISSING],micub_err[MAP]);
 	// is there any missing values in map?
+	//ft_free(cubdata->map);
 }
 
 

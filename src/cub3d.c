@@ -24,8 +24,12 @@ int main(int argc, char **argv)
 		ft_putstr_fd("too many arguments\n", 1);
 	else
 	{
-		t_data cubdata;
+	
+	
 
+
+
+		t_data cubdata;
 		parsing(&cubdata, argv[1]);
 		initialize(&cubdata);
 		//printf("\nposx :%f\nposy: %f\ndirx: %f\ndiry: %f\nplanx: %f\nplany: %f\n",

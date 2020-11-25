@@ -10,28 +10,25 @@
 #                                                                              #
 # **************************************************************************** #
 
-######### addddddd flags !!!!!!!!
 NAME =	cub3d
 
 LIBFT = ./libft/libft.a
 
-CUB3D = cub3d.c
+CUB3D = src/cub3d.c
 
-CUBLIB = cub3d.a
+CUBLIB = src/cub3d.a
 
-MLX = ./minilibx/libmlx.a
+MLX = minilibx/libmlx.a
 
-SRCS = initialize.c \
-	   ./gnl/get_next_line.c \
-	   ./gnl/get_next_line_utils.c \
-	   parsing.c \
-	   walls.c 
+SRCS =  gnl/get_next_line.c \
+		gnl/get_next_line_utils.c \
+		src/initialize.c \
+		src/parsing/parsing.c \
+		src/walls.c 
 		
 OBJS =$(SRCS:.c=.o)
 
-FLAGS=-Wall -Werror -Wextra
-
-CC=gcc
+FLAGS = -Wall -Wextra -Werror 
 
 LIBS = -lz -framework OpenGL -framework AppKit -I mlx
 
@@ -42,18 +39,20 @@ all: $(NAME)
 $(NAME): ${OBJS}
 		 @$(MAKE) -C ./libft
 		 @ar rcs $(CUBLIB) $(OBJS)
-		 @gcc -Wall -Werror -Wextra $(CUB3D) $(CUBLIB) $(LIBFT) $(MLX) $(LIBS) -o $(NAME) 
+		 gcc $(FLAGS) $(CUB3D) $(CUBLIB) $(LIBFT) $(MLX) $(LIBS) -o $(NAME) 
 
 %.o : %.c
 	@$(CC) -c -o $@ $< 
  
 clean:
 	@$(MAKE) -C ./libft clean
-	@rm -f *.o
-	@rm -f ./gnl/*.o
+	@rm -f src/*.o
+	@rm -f src/parsing/*.o
+	@rm -f gnl/*.o
+
+	
 fclean: clean
 	@$(MAKE) -C ./libft fclean
-	#$(MAKE) -C ./minilibx fclean
 	@rm -f $(NAME)
 	@rm -f $(CUBLIB)
 re: fclean all

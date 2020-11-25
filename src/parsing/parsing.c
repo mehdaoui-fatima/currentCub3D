@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../cub3d.h"
 
 #define MAX_WIDTH 2560
 #define MAX_HEIGHT 1440
@@ -21,6 +21,7 @@
 #define INVALID_MAP 15
 #define MAP 16
 #define DIR 17
+#define EXTENSION 18
 
 char *(micub_err[]) =
 {
@@ -41,7 +42,8 @@ char *(micub_err[]) =
 	"No spaces needed at the start of the line, ",
 	"Invalid map, ",
 	"Map",
-	"Only one of the characters N,S,E or W is needed for the player’s start position, "
+	"Only one of the characters N,S,E or W is needed for the player’s start position, ",
+	"Incorrect extension, .png required, ",
 };
 
 
@@ -159,6 +161,7 @@ void	resolution(t_data *cubdata)
 	else
 		ft_errors(micub_err[INVALID_LINE], micub_err[RESOLUTION]);
 	ft_free(cubdata->newline);
+	
 }
 
 
@@ -254,6 +257,16 @@ void    ft_ceil_floor(t_data *cubdata)
 
 
 // texture  **************************************************
+
+
+int	texend(char *path)
+{
+	int		len;
+
+	len = ft_strlen(path) - 1;
+	return (path[len] == 'g' && path[len - 1] == 'n' && path[len - 2] == 'p' && path[len - 3] == '.');
+}
+
 int	null_text(char *path)
 {
 	return ((path != NULL));
@@ -278,6 +291,9 @@ char	*ft_each_texture(char *path, t_data *cubdata)
 	path = ft_strdup(cubdata->newline[1]);
 	//printf("%s\n",path);
 	ft_free(cubdata->newline);
+
+	if (!texend(path))
+		ft_errors(micub_err[EXTENSION],micub_err[TEXTURE]);
 	return (path);
 }
 
@@ -302,15 +318,6 @@ void	ft_textures(t_data *cubdata)
 		ft_errors(micub_err[INVALID_LINE], micub_err[TEXTURE]);
 	
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -626,6 +633,7 @@ void	ft_addrow(t_data *cubdata)
 	cubdata->max_len = (cubdata->max_len < (res = ft_strlen(cubdata->line))) ? res : cubdata->max_len;
 	//printf("********%d*******\n",cubdata->max_len);
 	//free(cubdata->line);
+	//cubdata->line = NULL;
 	printf("%d\n\n\n",ft_len(cubdata->map));
 	int k = 0;
 	while(cubdata->map[k])
@@ -652,7 +660,7 @@ void	ft_map(t_data *cubdata)
 	//printf("ft_map() called\n%s",cubdata->line);
 	if (!ft_missingdata(cubdata))
 	{
-		//printf("missing data %d",ft_missingdata(cubdata));
+		printf("missing data %d",ft_missingdata(cubdata));
 		ft_errors (micub_err[INVALID_LINE], micub_err[MAP_FILE]);
 	}	
 	if (true)
@@ -711,12 +719,27 @@ void	ft_map(t_data *cubdata)
 
 // parsing  **************************************************
 
+
+int	fileend(char *argv)
+{
+	int		arg;
+
+	arg = ft_strlen(argv) - 1;
+	return (argv[arg] == 'b' && argv[arg - 1] == 'u' && argv[arg - 2] == 'c' && argv[arg - 3] == '.');
+}
+
+
+
+
 t_data *parsing(t_data *cubdata, char *argv)
 {
 	char	r;
-	
+
+	if (!fileend(argv))
+		ft_errors("ivalid extension","");
 	if ((cubdata->fd = open(argv, O_RDONLY)) < 0)
 	{
+		ft_putendl_fd("Error\n", 1);
 		perror(strerror(errno));
 		exit(0);
 	}
@@ -734,13 +757,13 @@ t_data *parsing(t_data *cubdata, char *argv)
 			ft_ceil_floor(cubdata);
 		else if (r == 'N' || r == 'S' || r == 'W' || r == 'E')
 			ft_textures(cubdata);
-		else if  (r == '1')
+		else if (r == '1')
 		{
 			ft_map(cubdata);
-		}	
+		}
 		else
 		{
-			//printf("|%s|\n",cubdata->line);
+			printf("|error here%s|\n",cubdata->line);
 			ft_errors (micub_err[IMPOSTER], micub_err[MAP_FILE]);
 		}
 		free(cubdata->line);

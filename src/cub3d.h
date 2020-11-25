@@ -20,9 +20,9 @@
 #include <stdlib.h>
 #include <errno.h> //errno
 #include <string.h> //strerror
-#include "./libft/libft.h"
-#include "./gnl/get_next_line.h"
-#include "./minilibx/mlx_png.h"
+#include "../libft/libft.h"
+#include "../gnl/get_next_line.h"
+#include "../minilibx/mlx_png.h"
 
 
 

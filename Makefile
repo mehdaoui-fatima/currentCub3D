@@ -22,9 +22,21 @@ MLX = minilibx/libmlx.a
 
 SRCS =  gnl/get_next_line.c \
 		gnl/get_next_line_utils.c \
-		src/initialize.c \
+		src/walls/initialize.c \
 		src/parsing/parsing.c \
-		src/walls.c 
+		src/parsing/parse_resolution.c \
+		src/parsing/parse_utils.c \
+		src/parsing/parse_ceil_floor.c \
+		src/parsing/parse_texture.c \
+		src/parsing/parse_map.c \
+		src/parsing/map_check.c \
+		src/parsing/map_create.c \
+		src/sprites/sprite.c \
+		src/walls/movement.c \
+		src/walls/draw1.c \
+		src/walls/draw2.c \
+		src/walls/walls.c 
+
 		
 OBJS =$(SRCS:.c=.o)
 
@@ -46,9 +58,11 @@ $(NAME): ${OBJS}
  
 clean:
 	@$(MAKE) -C ./libft clean
-	@rm -f src/*.o
-	@rm -f src/parsing/*.o
-	@rm -f gnl/*.o
+	@rm -f ${OBJS}
+
+
+
+
 
 	
 fclean: clean

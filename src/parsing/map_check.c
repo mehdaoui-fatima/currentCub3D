@@ -66,6 +66,7 @@ void ft_dir_plan(t_cub3d *cub, double *tab)
 	cub->diry  = tab[1];
 	cub->planx = tab[2];
 	cub->plany = tab[3];
+	free(tab);
 	//printf("-----|%f|%f|%f|%f-----\n\n\n",cub->cub3d.dirx ,
 	//cub->cub3d.diry,cub->cub3d.planx,cub->cub3d.plany);
 }

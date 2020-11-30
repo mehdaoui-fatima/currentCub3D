@@ -35,7 +35,8 @@ SRCS =  gnl/get_next_line.c \
 		src/walls/movement.c \
 		src/walls/draw1.c \
 		src/walls/draw2.c \
-		src/walls/walls.c 
+		src/walls/walls.c \
+		bmpfile/make_bmp.c
 
 		
 OBJS =$(SRCS:.c=.o)

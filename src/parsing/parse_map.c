@@ -18,28 +18,29 @@ int	ft_missingdata(t_cub3d *cub)
 void	ft_addrow(t_cub3d *cub)
 {
 	int res;
-
 	cub->maps.tmp = (char**)malloc((cub->maps.map_len = ft_len(cub->maps.map) + 2)*sizeof(char*));
 	cub->maps.index = -1;
 	//printf("map_len%d\n",cub->map_len);
 	while(cub->maps.map[++cub->maps.index]) //0
-		cub->maps.tmp[cub->maps.index] = cub->maps.map[cub->maps.index];
-	cub->maps.tmp[cub->maps.index] = cub->getl.line;
+	{
+		cub->maps.tmp[cub->maps.index] = ft_strdup(cub->maps.map[cub->maps.index]);
+	}
+	cub->maps.tmp[cub->maps.index] = ft_strdup(cub->getl.line);
 	cub->maps.tmp[cub->maps.index + 1] = NULL;
 	cub->maps.max_len = (cub->maps.max_len < (res = ft_strlen(cub->getl.line))) ? res : cub->maps.max_len;
-	//printf("********%d*******\n",cub->max_len);
-	//free(cub->line);
 	printf("%d\n\n\n",ft_len(cub->maps.map));
-	int k = 0;
-	while(cub->maps.map[k])
-	{
-		printf("|%s|\n",cub->maps.map[k]);
-		k++;
-	}
-	free(cub->maps.map);
-	//cub->map = (char**)malloc(sizeof(char*)*1);
+	// int k = 0;
+	// while(cub->maps.map[k])
+	// {
+	// 	printf("|%s|\n",cub->maps.map[k]);
+	// 	k++;
+	// }
+	// printf("vefore free %p\n%p\n",cub->maps.map,cub->maps.tmp);
+	ft_free(cub->maps.map);
 	cub->maps.map = cub->maps.tmp;
-	
+	printf("after free %p\n%p\n",cub->maps.map,cub->maps.tmp);
+	free(cub->getl.line);	
+	cub->getl.line = NULL;
 	//printf("*********%d******\n");
 }
 
@@ -69,8 +70,9 @@ void	ft_map(t_cub3d *cub, char *micub_err[])
 		//printf("|%s|\n",cub->line);
 		free(cub->getl.line);
 	}
-	while ((cub->getl.r = get_next_line(cub->getl.fd,&(cub->getl.line))) == 1)
+	while ((cub->getl.r = get_next_line(cub->getl.fd, &(cub->getl.line))) == 1)
 	{
+		//printf("-- %s --\n", cub->getl.line);
 		ft_addrow(cub);
 		// if (cub->line)
 		// 	free(cub->line);
@@ -83,6 +85,9 @@ void	ft_map(t_cub3d *cub, char *micub_err[])
 			
 		//printf("|%s|\n",cub->line);
 		//cub->line = NULL;
+		//free(cub->getl.line);
+		
+		//cub->getl.line = NULL;
 	}	
 	ft_addrow(cub);
 	//free(cub->line);

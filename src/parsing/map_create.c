@@ -16,9 +16,9 @@ void	ft_new_map(t_cub3d *cub)
 		ft_memset(s,32,cub->maps.max_len - len);
 		cub->maps.new_map[i] =  ft_strjoin(cub->maps.map[i],s);
 		free(s);
-		//s = NULL;
-		//printf("--%s--\n", cub->maps.new_map[i]);
+		//free(cub->maps.map[i]);
 	}
+	ft_free(cub->maps.map);
 }
 
 

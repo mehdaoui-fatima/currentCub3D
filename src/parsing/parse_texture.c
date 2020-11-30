@@ -30,7 +30,6 @@ char	*ft_each_texture(char *path, t_cub3d *cub, char*micub_err[])
 		ft_errors(micub_err[INVALID_PATH], micub_err[TEXTURE]);
 
 	path = ft_strdup(cub->getl.newline[1]);
-	ft_free(cub->getl.newline);
 	if (!pngend(path))
 		ft_errors(micub_err[EXTENSION], micub_err[MAP_FILE]);
 	return (path);
@@ -55,5 +54,6 @@ void	ft_textures(t_cub3d *cub, char *micub_err[])
 		cub->tex.sprite = ft_each_texture(cub->tex.sprite, cub, micub_err);
 	else
 		ft_errors(micub_err[INVALID_LINE], micub_err[TEXTURE]);
+	ft_free(cub->getl.newline); // make sure of this 
 	
 }

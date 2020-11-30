@@ -229,8 +229,6 @@ typedef struct s_cub3d{
 }				t_cub3d;
 
 
-
-
 t_cub3d      *initialize(t_cub3d *cubdata);//init cub3d
 t_cub3d      *parsing(t_cub3d *cubdata, char *argv); //parsing .cub
 //void        resolution(t_cub3d *cubdata, char *(micub_err[]));
@@ -269,7 +267,7 @@ void        draw_sprites(t_cub3d *cubdata);
 
 
 //int draw_screen(t_data *cubdata);
-
+void		make_bmp(t_cub3d *cub);
 
 
 #endif

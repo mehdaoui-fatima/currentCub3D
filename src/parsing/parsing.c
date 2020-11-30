@@ -72,7 +72,12 @@ t_cub3d *parsing(t_cub3d *cub, char *argv)
 	while ((cub->getl.r = get_next_line(cub->getl.fd,&(cub->getl.line))) == 1)
 	{
 		if (strcmp(cub->getl.line, "\0") == 0)
+		{
+			free(cub->getl.line);
+			cub->getl.line = NULL;
 			continue;
+		}
+			
 		cub->getl.spaces = ft_spaces(cub); // 0 or index
 		//printf("--%d--\n",cub->spaces);
 		r = cub->getl.line[cub->getl.spaces];

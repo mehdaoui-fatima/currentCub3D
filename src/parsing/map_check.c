@@ -151,8 +151,10 @@ void	ft_mapvalid(t_cub3d *cub, char *micub_err[])
 		}
 		len = ft_strlen(str) - 1;
 		ft_borders(str[0], str[len], micub_err);
-		len_j =  ft_strlen(cub->maps.new_map[i]) - 1;
+		len_j = ft_strlen(cub->maps.new_map[i]) - 1;
 		len_i = cub->maps.index;
+		free(str);
+		str = NULL;
 		j = 0;
 		//printf("|%s|i=%d|j=%d|\n",cub->new_map[i],len_i,len_j);
 		while(cub->maps.new_map[i][j]) // 3 lines
@@ -188,6 +190,7 @@ void	ft_mapvalid(t_cub3d *cub, char *micub_err[])
 			}
 			j++;
 		}
+		
 	}
 	printf("\n----num sprite:%d\n",cub->numsprites);
 	cub->zbuffer = (double*)malloc(sizeof(double) * cub->res.rx);

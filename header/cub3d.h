@@ -22,7 +22,7 @@
 #include <string.h> //strerror
 #include "../libft/libft.h"
 #include "../gnl/get_next_line.h"
-#include "../minilibx/mlx_png.h"
+// #include "../minilibx/mlx_png.h"
 
 
 #define texWidth 64
@@ -163,6 +163,8 @@ typedef struct s_cub3d{
 	t_img img;
 	t_img texture[5];//array of images for texture
 	t_sprite *sprites;
+
+	int	keyboard[300];
 	int *connection; 
 	int *window;
 	double posx; //player position 
@@ -260,7 +262,10 @@ void  drawline(int x, int start, int end, t_cub3d *cubdata);
 
 
 void        draw_wall(t_cub3d *cubdata);// drawing walls
-int         ft_key_press(int keycode, t_cub3d *cubdata);//to be able to used by main
+int         ft_keys(t_cub3d *cubdata);//to be able to used by main
+int			ft_key_pressed(int keycode, t_cub3d *cub);
+int			ft_key_released(int keycode, t_cub3d *cub);
+int			exitcross(t_cub3d *cub);
 void        texture(t_cub3d *cubdata);
 void        draw_sprites(t_cub3d *cubdata);
 

@@ -40,32 +40,28 @@ void    drawline(int x, int start, int end, t_cub3d *cub)
 {
 	//ft_putstr_fd("\nhere\n",1);
 	int i = 0;
-	while (i  <  cub->res.ry)
+	while (i  < cub->res.ry)
 	{
-
-		if (i <= start)
+		if (i < start)
 			cub->img.data[i * cub->res.rx + x ] = cub->rgb.ceilColor;
-		else 
+		else if (i <= end)
 		{
-			if (i <= end)
-			{
-				
-				cub->texy = (int)cub->texpos;
-				cub->texpos += cub->step;
-				
-				
-				if(cub->side == 0)
-					cub->img.data[i * cub->res.rx + x ] = cub->texture[2].data[cub->texx + cub->texy * cub->texture[2].h];
-				else if(cub->side == 1)
-					cub->img.data[i * cub->res.rx + x ] = cub->texture[1].data[cub->texx + cub->texy * cub->texture[1].h];
-				else if (cub->side == 2)
-					cub->img.data[i * cub->res.rx + x ] = cub->texture[3].data[cub->texx + cub->texy * cub->texture[3].h];
-				else
-					cub->img.data[i * cub->res.rx + x ] = cub->texture[0].data[cub->texx + cub->texy * cub->texture[0].h];	
-			}
+			
+			cub->texy = (int)cub->texpos;
+			cub->texpos += cub->step;
+			
+			
+			if(cub->side == 0)
+				cub->img.data[i * cub->res.rx + x ] = cub->texture[2].data[cub->texx + cub->texy * cub->texture[2].h];
+			else if(cub->side == 1)
+				cub->img.data[i * cub->res.rx + x ] = cub->texture[1].data[cub->texx + cub->texy * cub->texture[1].h];
+			else if (cub->side == 2)
+				cub->img.data[i * cub->res.rx + x ] = cub->texture[3].data[cub->texx + cub->texy * cub->texture[3].h];
 			else
-				cub->img.data[i * cub->res.rx + x ] = cub->rgb.floorColor ;
+				cub->img.data[i * cub->res.rx + x ] = cub->texture[0].data[cub->texx + cub->texy * cub->texture[0].h];	
 		}
+		else if (i > end)
+			cub->img.data[i * cub->res.rx + x ] = cub->rgb.floorColor ;
 	
 		// if(cub->img.h  <= start)
 		// 	cub->img.data[cub->img.h  * cub->rx + x] = cub->texture[0].data[cub->texx + cub->texture[0].w * cub->texy];

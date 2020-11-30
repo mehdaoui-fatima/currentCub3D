@@ -2,9 +2,9 @@
 
 #include "bmp.h"
 
-static t_bmp	init_bmph(t_cub3d *cub)
+static t_bmp init_bmph(t_cub3d *cub)
 {
-	t_bmp		res;
+	t_bmp res;
 
 	res.id[0] = 'B';
 	res.id[1] = 'M';
@@ -27,10 +27,10 @@ static t_bmp	init_bmph(t_cub3d *cub)
 	return (res);
 }
 
-void			make_bmp(t_cub3d *cub)
+void make_bmp(t_cub3d *cub)
 {
-	t_bmp		img;
-	int			file;
+	t_bmp img;
+	int file;
 
 	file = open("./cub3d.bmp", O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
 	img = init_bmph(cub);

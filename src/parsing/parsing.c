@@ -71,7 +71,7 @@ t_cub3d *parsing(t_cub3d *cub, char *argv)
 	initializedata(cub);
 	while ((cub->getl.r = get_next_line(cub->getl.fd,&(cub->getl.line))) == 1)
 	{
-		if (strcmp(cub->getl.line, "\0") == 0)
+		if (ft_strcmp(cub->getl.line, "\0") == 0)
 		{
 			free(cub->getl.line);
 			cub->getl.line = NULL;

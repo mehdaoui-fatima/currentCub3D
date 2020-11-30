@@ -5,16 +5,16 @@ C 174,47,74
 F 003,143,143
 
 
-NO ./pics/wood.png
+NO ./pics/wood.xpm
 
-S ./pics/barrel.png
+S ./pics/barrel.xpm
 
 
-SO  ./pics/greystone.png
+SO  ./pics/greystone.xpm
 
-EA ./pics/bluestone.png
+EA ./pics/bluestone.xpm
 
-WE ./pics/redbrick.png
+WE ./pics/redbrick.xpm
 
 11111111111
 1002000001 1111111

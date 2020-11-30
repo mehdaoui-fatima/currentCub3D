@@ -1,39 +1,51 @@
 #include "../../header/cub3d.h"
 
-int ft_key_press(int keycode, t_cub3d *cub)
+int	ft_key_pressed(int keycode, t_cub3d *cub)
+{
+	cub->keyboard[keycode] = 1;
+	return (0);
+}
+
+int	ft_key_released(int keycode, t_cub3d *cub)
+{
+	cub->keyboard[keycode] = 0;
+	return (0);
+}
+
+int ft_keys(t_cub3d *cub)
 {
 //	printf("%d",keycode);
-	if (cub->movespeed > 1)
-		cub->movespeed *= 0.1;
-	if (keycode == move_right)
+	// if (cub->movespeed > 1)
+	// 	cub->movespeed *= 0.1;
+	if (cub->keyboard[move_right])
 	{
 		if(cub->maps.worldMap[(int)(cub->posx + cub->planx * cub->movespeed)][(int)(cub->posy)] == 0) 
 			cub->posx += cub->planx * cub->movespeed;
 		if(cub->maps.worldMap[(int)(cub->posx)][(int)(cub->posy + cub->plany* cub->movespeed)] == 0)
 		cub->posy += cub->plany* cub->movespeed;
 	}
-	if (keycode == move_left)
+	if (cub->keyboard[move_left])
 	{
 		if(cub->maps.worldMap[(int)(cub->posx - cub->planx * cub->movespeed)][(int)(cub->posy)] == 0) 
 			cub->posx -= cub->planx * cub->movespeed;
 		if(cub->maps.worldMap[(int)(cub->posx)][(int)(cub->posy - cub->plany* cub->movespeed)] == 0)
 			cub->posy -= cub->plany* cub->movespeed;
 	}
-	if (keycode == move_towards)
+	if (cub->keyboard[move_towards])
 	{
 		if(cub->maps.worldMap[(int)(cub->posx + cub->dirx * cub->movespeed)][(int)(cub->posy)] == 0) 
 			cub->posx += cub->dirx * cub->movespeed;
 		if(cub->maps.worldMap[(int)(cub->posx)][(int)(cub->posy + cub->diry * cub->movespeed)] == 0)
 		cub->posy += cub->diry * cub->movespeed;
 	}
-	if (keycode == move_backwards)
+	if (cub->keyboard[move_backwards])
 	{
 		if(cub->maps.worldMap[(int)(cub->posx - cub->dirx * cub->movespeed)][(int)(cub->posy)] == 0)
 			cub->posx -= cub->dirx * cub->movespeed;
 		if(cub->maps.worldMap[(int)(cub->posx)][(int)(cub->posy - cub->diry * cub->movespeed)] == 0)
 			cub->posy -= cub->diry * cub->movespeed;
 	}
-	if (keycode == rot_right)
+	if (cub->keyboard[rot_right])
 	{
 		cub->olddirx = cub->dirx;
 		cub->dirx = cub->dirx * cos(-cub->rotspeed) - cub->diry * sin(-cub->rotspeed);
@@ -42,7 +54,7 @@ int ft_key_press(int keycode, t_cub3d *cub)
 		cub->planx = cub->planx * cos(-cub->rotspeed) - cub->plany * sin(-cub->rotspeed);
 		cub->plany = cub->oldplanx * sin(-cub->rotspeed) + cub->plany * cos(cub->rotspeed);
 	}
-	if (keycode == rot_left)
+	if (cub->keyboard[rot_left])
 	{
 		cub->olddirx =  cub->dirx;
 		cub->dirx =  cub->dirx * cos( cub->rotspeed) -  cub->diry * sin( cub->rotspeed);
@@ -51,7 +63,7 @@ int ft_key_press(int keycode, t_cub3d *cub)
 		cub->planx =  cub->planx * cos(cub->rotspeed) -  cub->plany * sin( cub->rotspeed);
 		cub->plany =  cub->oldplanx * sin(cub->rotspeed) + cub->plany * cos(cub->rotspeed);
 	}
-	if (keycode == exit_)
+	if (cub->keyboard[exit_])
 		exit(1);
 	mlx_clear_window(cub->connection, cub->window);
 	mlx_destroy_image(cub->connection, cub->img.image_ptr);

@@ -15,10 +15,10 @@ void    draw_wall(t_cub3d *cub)
 		draw_wall_perp(cub);
 		draw_wall_h_w(cub);
 		drawline(cub->x, cub->drawStart, cub->drawEnd, cub);
-		cub->x++;
 		//printf("%f\n",cub->perpwalldist);
 		//TODO needed for sprites
-		cub->zbuffer[(int)(cub->x)] = cub->perpwalldist;	
+		cub->zbuffer[(int)(cub->x)] = cub->perpwalldist;
+		cub->x++;
 		//printf("%f\n",zbuffer[(int)(cub->x)]);
 	}
 	draw_sprites(cub);

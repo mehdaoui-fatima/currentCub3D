@@ -12,6 +12,16 @@
 
 #include "../header/cub3d.h"
 
+
+
+int exitcross(t_cub3d *cub)
+{
+	mlx_clear_window(cub->connection, cub->window);
+	exit(1);
+}
+
+
+
 int main(int argc, char **argv)
 {
 	if (argc != 2 && argc != 3)
@@ -32,10 +42,10 @@ int main(int argc, char **argv)
 		if (argc == 3 && (ft_strcmp(argv[2],"--save") == 0))
 			make_bmp(&cub);
 		mlx_put_image_to_window(cub.connection, cub.window, cub.img.image_ptr, 0, 0);
-		mlx_hook(cub.window, 2, 0, ft_key_press, &cub);
-		mlx_hook(cub.window, 17, 0, ft_key_press, &cub);
-		//mlx_loop_hook(cubdata.cub3d.connection, draw_screen, &cubdata);
-		//ft_free((char**)cubdata.worldMap);
+		mlx_hook(cub.window, 2, 0, ft_key_pressed, &cub);
+		mlx_hook(cub.window, 3, 0, ft_key_released, &cub);
+		mlx_hook(cub.window, 17, 0, exitcross, &cub);
+		mlx_loop_hook(cub.connection, ft_keys, &cub);
 		mlx_loop(cub.connection);
 	}
 	

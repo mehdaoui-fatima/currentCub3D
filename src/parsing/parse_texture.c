@@ -10,7 +10,7 @@ int	pngend(char *png)
 	int		len;
 
 	len = ft_strlen(png) - 1; 
-	return (png[len] == 'g' && png[len - 1] == 'n' && png[len - 2] == 'p' && png[len - 3] == '.');
+	return (png[len] == 'm' && png[len - 1] == 'p' && png[len - 2] == 'x' && png[len - 3] == '.');
 }
 
 char	*ft_each_texture(char *path, t_cub3d *cub, char*micub_err[])

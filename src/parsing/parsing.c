@@ -77,7 +77,6 @@ t_cub3d *parsing(t_cub3d *cub, char *argv)
 			cub->getl.line = NULL;
 			continue;
 		}
-			
 		cub->getl.spaces = ft_spaces(cub); // 0 or index
 		//printf("--%d--\n",cub->spaces);
 		r = cub->getl.line[cub->getl.spaces];

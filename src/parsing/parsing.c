@@ -1,31 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/30 19:57:40 by fmehdaou          #+#    #+#             */
+/*   Updated: 2020/12/01 13:18:48 by fmehdaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../header/cub3d.h"
 
-char *(micub_err[]) =
-{
-	"Unexpected number of arguments, ",
- 	"Duplicate line, ",
-	"Must contain only integers, ",
-	"Incorrect Line, ",
-	"RGB format not correct, values must be in the 0..255 range, ",
-	"Open image failed. path is not correct, ",
-	"Width and Height must be non-negative, ",
-	"Resolution",
-	"Texture path",
-	"Map file",
-	"Ceiling",
-	"Floor",
-	"Missing values,",
-	"Imposter line, ",
-	"No spaces needed at the start of the line, ",
-	"Invalid map, ",
-	"Map",
-	"Only one of the characters N,S,E or W is needed for the player’s start position, ",
-	"Invalid extension .png required, ",
-	"Invalid extension fileName.cub required, ",
-};
-
-
-void initializedata(t_cub3d *cub)
+void	initializedata(t_cub3d *cub)
 {
 	cub->res.rx = -1;
 	cub->res.ry = -1;
@@ -46,65 +33,61 @@ void initializedata(t_cub3d *cub)
 	cub->numsprites = 0;
 }
 
-
-int	fileend(char *argv)
+void	files_error(t_cub3d *cub, char *argv)
 {
-	int		arg;
+	int	arg;
 
-	arg = ft_strlen(argv) - 1; 
-	return (argv[arg] == 'b' && argv[arg - 1] == 'u' && argv[arg - 2] == 'c' && argv[arg - 3] == '.');
-}
-
-t_cub3d *parsing(t_cub3d *cub, char *argv)
-{
-	char	r;
-
-
-	if (!fileend(argv))
-		ft_errors(micub_err[FILE],micub_err[MAP_FILE]);
+	arg = ft_strlen(argv) - 1;
+	if (!(argv[arg] == 'b' && argv[arg - 1] == 'u' && argv[arg - 2] == 'c'
+	&& argv[arg - 3] == '.'))
+		ft_errors(g_micub_err[FILE], g_micub_err[MAP_FILE]);
 	if ((cub->getl.fd = open(argv, O_RDONLY)) < 0)
 	{
 		ft_putendl_fd("Error\n", 1);
 		perror(strerror(errno));
 		exit(0);
 	}
-	initializedata(cub);
-	while ((cub->getl.r = get_next_line(cub->getl.fd,&(cub->getl.line))) == 1)
+}
+
+int		empty_line(t_cub3d *cub)
+{
+	int res;
+
+	res = 0;
+	if (ft_strcmp(cub->getl.line, "\0") == 0)
 	{
-		if (ft_strcmp(cub->getl.line, "\0") == 0)
-		{
-			free(cub->getl.line);
-			cub->getl.line = NULL;
+		free(cub->getl.line);
+		cub->getl.line = NULL;
+		res = 1;
+	}
+	return (res);
+}
+
+t_cub3d	*parsing(t_cub3d *cub, char *argv)
+{
+	char	r;
+
+	files_error(cub, argv);
+	initializedata(cub);
+	while ((cub->getl.r = get_next_line(cub->getl.fd, &(cub->getl.line))) == 1)
+	{
+		if (empty_line(cub))
 			continue;
-		}
-		cub->getl.spaces = ft_spaces(cub); // 0 or index
-		//printf("--%d--\n",cub->spaces);
+		cub->getl.spaces = ft_spaces(cub);
 		r = cub->getl.line[cub->getl.spaces];
 		if (r == 'R')
-			resolution(cub, micub_err);
+			resolution(cub);
 		else if (r == 'F' || r == 'C')
-			ft_ceil_floor(cub, micub_err);
+			ft_ceil_floor(cub);
 		else if (r == 'N' || r == 'S' || r == 'W' || r == 'E')
-			ft_textures(cub, micub_err);
-		else if  (r == '1')
-		{
-			ft_map(cub, micub_err);
-		}	
+			ft_textures(cub);
+		else if (r == '1')
+			ft_map(cub);
 		else
-		{
-			//printf("|%s|\n",cub->line);
-			ft_errors (micub_err[IMPOSTER], micub_err[MAP_FILE]);
-		}
+			ft_errors(g_micub_err[IMPOSTER], g_micub_err[MAP_FILE]);
 		free(cub->getl.line);
-		//printf("%c\n",r);
-			
-	}//only one line left befor EOF 
-	 if (!ft_missingdata(cub) || !cub->maps.map)
-	 	ft_errors (micub_err[MISSING], micub_err[MAP_FILE]);
-	// printf("\n\nrx:%lld\n\nry:%lld\n\n", cub->rx, cub->ry);
-	// printf("Floor\nr:%d\n\ng:%d\n\nb:%d\n\n", cub->fr, cub->fg, cub->fb);
-	// printf("Ceiling\nr:%d\n\ng:%d\n\nb:%d\n\n", cub->cr, cub->cg, cub->cb);
-	// printf("north:%s\n\neast:%s\n\nsouth:%s\n\nwest:%s\n\nsprite:%s", cub->north,cub->east,
-	//  cub->south, cub->west,cub->sprite);
+	}
+	if (!ft_missingdata(cub) || !cub->maps.map)
+		ft_errors(g_micub_err[MISSING], g_micub_err[MAP_FILE]);
 	return (cub);
 }

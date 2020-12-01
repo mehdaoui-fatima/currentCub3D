@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fmehdaou <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/21 16:49:15 by fmehdaou          #+#    #+#              #
-#    Updated: 2019/12/30 12:18:21 by fmehdaou         ###   ########.fr        #
+#    Updated: 2020/12/01 19:37:56 by fmehdaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRCS =  gnl/get_next_line.c \
 		src/parsing/parse_texture.c \
 		src/parsing/parse_map.c \
 		src/parsing/map_check.c \
+		src/parsing/map_check_helper.c \
 		src/parsing/map_create.c \
 		src/sprites/sprite.c \
 		src/walls/movement.c \
@@ -52,7 +53,7 @@ all: $(NAME)
 $(NAME): ${OBJS}
 		 @$(MAKE) -C ./libft
 		 @ar rcs $(CUBLIB) $(OBJS)
-		 gcc $(FLAGS) $(CUB3D) $(CUBLIB) $(LIBFT) $(MLX) $(LIBS) -o $(NAME) 
+		 gcc $(FLAGS) $(CUB3D) $(CUBLIB) $(LIBFT) $(MLX) $(LIBS) -o $(NAME)
 
 %.o : %.c
 	@$(CC) -c -o $@ $< 

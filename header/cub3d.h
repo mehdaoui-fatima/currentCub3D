@@ -1,17 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cub3D.h                                            :+:      :+:    :+:   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 16:35:52 by fmehdaou          #+#    #+#             */
-/*   Updated: 2020/03/11 12:52:24 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/01 20:33:23 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef  CUB3D_H
 # define  CUB3D_H
+
+
+
+
+
 
 #include <mlx.h>
 #include <math.h>
@@ -22,7 +27,7 @@
 #include <string.h> //strerror
 #include "../libft/libft.h"
 #include "../gnl/get_next_line.h"
-// #include "../minilibx/mlx_png.h"
+
 
 
 #define texWidth 64
@@ -63,8 +68,29 @@
 #define FILE 19
 
 
-
-
+static char *(g_micub_err[]) =
+{
+	"Unexpected number of arguments, ",
+	"Duplicate line, ",
+	"Must contain only integers, ",
+	"Incorrect Line, ",
+	"RGB format not correct, values must be in the 0..255 range, ",
+	"Open image failed. path is not correct, ",
+	"Width and Height must be non-negative, ",
+	"Resolution",
+	"Texture path",
+	"Map file",
+	"Ceiling",
+	"Floor",
+	"Missing values,",
+	"Imposter line, ",
+	"No spaces needed at the start of the line, ",
+	"Invalid map, ",
+	"Map",
+	"Only one of N,S,E or W is needed for the player’s start position, ",
+	"Invalid extension .png required, ",
+	"Invalid extension fileName.cub required, "
+};
 
 typedef struct s_getline {
 	char *line;
@@ -77,14 +103,10 @@ typedef struct s_getline {
 } t_getline;
 
 
-
-
 typedef struct s_resolution {
 	long long rx;
 	long long ry;
 } t_resolution  ;
-
-
 
 
 typedef struct s_rgb {
@@ -151,6 +173,21 @@ typedef struct s_sprite
 	double spritedistance;
 } t_sprite;
 
+typedef struct	s_var
+{
+	int i;
+	int j;
+	int	len;
+	char *str;
+	int len_j;
+	int len_i;
+	char a;
+	char b;
+	char c;
+	char d;
+	int len_next;
+	int len_previous;
+}				t_var;
 
 typedef struct s_cub3d{
 
@@ -233,20 +270,20 @@ typedef struct s_cub3d{
 
 t_cub3d      *initialize(t_cub3d *cubdata);//init cub3d
 t_cub3d      *parsing(t_cub3d *cubdata, char *argv); //parsing .cub
-//void        resolution(t_cub3d *cubdata, char *(micub_err[]));
-void        resolution(t_cub3d *cubdata, char *micub_err[]);
+
+void        resolution(t_cub3d *cubdata);
 void        ft_errors(char *error, char *str);
 int         ft_isnumber(char *s);
 int         ft_len(char **newline);
 void        ft_free(char **s);
 int         ft_spaces(t_cub3d *cubdata);
-void        ft_ceil_floor(t_cub3d *cubdata, char*micub_err[]);
-void        ft_textures(t_cub3d *cubdata, char*micub_err[]);
+void        ft_ceil_floor(t_cub3d *cubdata);
+void        ft_textures(t_cub3d *cubdata);
 int         ft_missingdata(t_cub3d *cubdata);
-void        ft_map(t_cub3d *cubdata, char *micub_err[]);
+void        ft_map(t_cub3d *cubdata);
 void        ft_new_map(t_cub3d *cubdata);
-void        ft_mapvalid(t_cub3d *cubdata, char *micub_err[]);
-void        ft_create_worldMap(t_cub3d *cubdata);
+void        ft_mapvalid(t_cub3d *cubdata);
+void        ft_create_worldmap(t_cub3d *cubdata);
 
 void        draw_sprites(t_cub3d *cubdata);
 
@@ -270,6 +307,13 @@ void        texture(t_cub3d *cubdata);
 void        draw_sprites(t_cub3d *cubdata);
 
 
+
+
+void first_last_line(char *first, char *last);
+void	ft_borders(char c1, char c2);
+int	ft_surrounded(char a, char b, char c , char d);
+double *create_dir_plan(double a, double b, double c, double d);
+void ft_dir_plan(t_cub3d *cub, double *tab);
 
 //int draw_screen(t_data *cubdata);
 void		make_bmp(t_cub3d *cub);

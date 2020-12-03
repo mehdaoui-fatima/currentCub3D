@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 14:05:09 by fmehdaou          #+#    #+#             */
-/*   Updated: 2020/12/01 16:54:20 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/02 14:31:00 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,21 @@ void	ft_create_worldmap(t_cub3d *cub)
 
 	i = -1;
 	k = 0;
-	cub->maps.worldMap = (int**)malloc(sizeof(int*) * (cub->maps.index + 1));
+	cub->maps.worldmap = (int**)malloc(sizeof(int*) * (cub->maps.index + 1));
 	while (cub->maps.new_map[++i])
 	{
-		cub->maps.worldMap[i] = (int*)malloc(sizeof(int) * cub->maps.max_len);
+		cub->maps.worldmap[i] = (int*)malloc(sizeof(int) * cub->maps.max_len);
 		j = -1;
 		while (cub->maps.new_map[i][++j])
 		{
 			if (cub->maps.new_map[i][j] == '2')
 				sprites_pos(&k, i, j, cub);
 			if (cub->maps.new_map[i][j] == ' ')
-				cub->maps.worldMap[i][j] = 1;
+				cub->maps.worldmap[i][j] = 1;
 			else if (ft_isalpha((int)cub->maps.new_map[i][j]))
-				cub->maps.worldMap[i][j] = 0;
+				cub->maps.worldmap[i][j] = 0;
 			else
-				cub->maps.worldMap[i][j] = cub->maps.new_map[i][j] - '0';
+				cub->maps.worldmap[i][j] = cub->maps.new_map[i][j] - '0';
 		}
 	}
 	ft_free(cub->maps.new_map);

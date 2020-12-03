@@ -1,19 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw1.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/02 09:14:59 by fmehdaou          #+#    #+#             */
+/*   Updated: 2020/12/02 14:31:00 by fmehdaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../header/cub3d.h"
 
 void	draw_wall_cx(t_cub3d *cub)
-{	
-	cub->cx = (2 * cub->x / cub->res.rx) - 1; // all the values are limited between [-1,1]
+{
+	cub->cx = (2 * cub->x / cub->res.rx) - 1;
 	cub->raydirx = cub->dirx + cub->planx * cub->cx;
 	cub->raydiry = cub->diry + cub->plany * cub->cx;
 }
 
-void	draw_wall_delta( t_cub3d *cub)
+void	draw_wall_delta(t_cub3d *cub)
 {
-	cub->deltadistx = (cub->raydiry == 0)? 0 : ((cub->raydirx == 0)? 1 : fabs(1 / cub->raydirx));
-	cub->deltadisty = (cub->raydirx == 0) ? 0 : ((cub->raydiry == 0) ? 1 : fabs(1 / cub->raydiry));
+	if (cub->raydiry == 0)
+		cub->deltadistx = 0;
+	else
+		cub->deltadistx = (cub->raydirx == 0) ? 1 : fabs(1 / cub->raydirx);
+	if (cub->raydirx == 0)
+		cub->deltadisty = 0;
+	else
+		cub->deltadisty = (cub->raydiry == 0) ? 1 : fabs(1 / cub->raydiry);
 	cub->mapx = (int)(cub->posx);
-	cub->mapy= (int)(cub->posy);
-	//printf("\n|%f %f %d %d|\n",cub->posx,cub->posy, cub->mapx, cub->mapy);
+	cub->mapy = (int)(cub->posy);
 }
 
 void	draw_wall_side(t_cub3d *cub)
@@ -36,7 +53,7 @@ void	draw_wall_side(t_cub3d *cub)
 	else
 	{
 		cub->stepy = 1;
-		cub->sidedisty = (cub->mapy+ 1.0 - cub->posy) * cub->deltadisty;
+		cub->sidedisty = (cub->mapy + 1.0 - cub->posy) * cub->deltadisty;
 	}
 }
 
@@ -55,17 +72,16 @@ void	draw_wall_dda(t_cub3d *cub)
 			cub->sidedisty += cub->deltadisty;
 			cub->mapy += cub->stepy;
 			cub->side = 1;
-		}//++
-		if(cub->side == 0 && cub->raydirx > 0)
+		}
+		if (cub->side == 0 && cub->raydirx > 0)
 		{
 			cub->side = 2;
 		}
-		 if(cub->side == 1 && cub->raydiry < 0)
+		if (cub->side == 1 && cub->raydiry < 0)
 		{
 			cub->side = 3;
-		}//++
-		//printf("---%d    %d----\n", cub->mapx, cub->mapy);
-		if (cub->maps.worldMap[cub->mapx][cub->mapy] == 1) 
+		}
+		if (cub->maps.worldmap[cub->mapx][cub->mapy] == 1)
 			cub->hit = 1;
-	} 
+	}
 }

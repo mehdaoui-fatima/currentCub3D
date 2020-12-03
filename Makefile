@@ -6,7 +6,7 @@
 #    By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/21 16:49:15 by fmehdaou          #+#    #+#              #
-#    Updated: 2020/12/01 19:37:56 by fmehdaou         ###   ########.fr        #
+#    Updated: 2020/12/02 12:05:42 by fmehdaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRCS =  gnl/get_next_line.c \
 		src/walls/movement.c \
 		src/walls/draw1.c \
 		src/walls/draw2.c \
+		src/walls/moves.c \
 		src/walls/walls.c \
 		bmpfile/make_bmp.c
 

@@ -1,8 +1,18 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_bmp.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/03 10:25:43 by fmehdaou          #+#    #+#             */
+/*   Updated: 2020/12/03 10:27:51 by fmehdaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "bmp.h"
 
-static t_bmp init_bmph(t_cub3d *cub)
+static	t_bmp	init_bmph(t_cub3d *cub)
 {
 	t_bmp res;
 
@@ -27,10 +37,10 @@ static t_bmp init_bmph(t_cub3d *cub)
 	return (res);
 }
 
-void make_bmp(t_cub3d *cub)
+void			make_bmp(t_cub3d *cub)
 {
-	t_bmp img;
-	int file;
+	t_bmp	img;
+	int		file;
 
 	file = open("./cub3d.bmp", O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
 	img = init_bmph(cub);

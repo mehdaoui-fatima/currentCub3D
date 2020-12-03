@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 11:17:19 by fmehdaou          #+#    #+#             */
-/*   Updated: 2020/12/01 13:42:49 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/02 14:30:06 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void	ft_ceil_floor(t_cub3d *cub)
 		get_color(len1, len2, cub);
 	else
 		ft_errors(g_micub_err[INVALID_LINE], g_micub_err[MAP_FILE]);
-	cub->rgb.ceilColor = create_rgb(cub->rgb.cr, cub->rgb.cg, cub->rgb.cb);
-	cub->rgb.floorColor = create_rgb(cub->rgb.fr, cub->rgb.fg, cub->rgb.fb);
+	cub->rgb.ceilcolor = create_rgb(cub->rgb.cr, cub->rgb.cg, cub->rgb.cb);
+	cub->rgb.floorcolor = create_rgb(cub->rgb.fr, cub->rgb.fg, cub->rgb.fb);
 	ft_free(cub->getl.newline);
 	ft_free(cub->getl.new);
 }

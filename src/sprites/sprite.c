@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 20:55:50 by fmehdaou          #+#    #+#             */
-/*   Updated: 2020/12/01 20:59:25 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/03 10:12:41 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,78 +14,102 @@
 
 void	tri(t_cub3d *cub)
 {
-	int j;
-	int k;
-	t_sprite tmp;
+	int			j;
+	int			k;
+	t_sprite	tmp;
 
 	j = -1;
-	k = -1;
-	while(++j < cub->numsprites)
+	while (++j < cub->numsprites)
 	{
 		k = -1;
 		while (++k < cub->numsprites - j - 1)
 		{
-			if (cub->sprites[k].spritedistance < cub->sprites[k+1].spritedistance) 
+			if (cub->sprites[k].spritedistance <
+			cub->sprites[k + 1].spritedistance)
 			{
-				
 				tmp = cub->sprites[k];
-				cub->sprites[k] =  cub->sprites[k + 1];
+				cub->sprites[k] = cub->sprites[k + 1];
 				cub->sprites[k + 1] = tmp;
 			}
 		}
 	}
 }
 
+void	sprite_cal(int i, t_cub3d *c)
+{
+	double invdet;
+
+	c->spritex = c->sprites[i].x - c->posx;
+	c->spritey = c->sprites[i].y - c->posy;
+	invdet = 1.0 / (c->planx * c->diry - c->dirx * c->plany);
+	c->transformx = invdet * (c->diry * c->spritex - c->dirx * c->spritey);
+	c->transformy = invdet * (-c->plany * c->spritex + c->planx * c->spritey);
+	c->spritescreenx = (int)((c->res.rx / 2) *
+	(1 + c->transformx / c->transformy));
+	c->vmovescreen = (int)(VMOVE / c->transformy);
+	c->spriteheight = abs((int)(c->res.ry / (c->transformy))) / VDIV;
+	c->drawstarty = -c->spriteheight / 2 + c->res.ry / 2 + c->vmovescreen;
+	if (c->drawstarty < 0)
+		c->drawstarty = 0;
+	c->drawendy = c->spriteheight / 2 + c->res.ry / 2 + c->vmovescreen;
+	if (c->drawendy >= c->res.ry)
+		c->drawendy = c->res.ry - 1;
+	c->spritewidth = abs((int)(c->res.ry / (c->transformy))) / UDIV;
+	c->drawstartx = -c->spritewidth / 2 + c->spritescreenx;
+	if (c->drawstartx < 0)
+		c->drawstartx = 0;
+	c->drawendx = c->spritewidth / 2 + c->spritescreenx;
+	if (c->drawendx >= c->res.rx)
+		c->drawendx = c->res.rx - 1;
+	c->stripe = c->drawstartx;
+}
+
+void	sprite_dr(t_cub3d *cub)
+{
+	int y;
+
+	cub->texx = (int)(256 * (cub->stripe -
+	(-cub->spritewidth / 2 + cub->spritescreenx))
+	* TEXWIDTH / cub->spritewidth) / 256;
+	if (cub->transformy > 0 && cub->stripe > 0
+	&& cub->stripe < cub->res.rx
+	&& cub->transformy < cub->zbuffer[cub->stripe])
+	{
+		y = cub->drawstarty;
+		while (y < cub->drawendy)
+		{
+			cub->d = (y - cub->vmovescreen) * 256 -
+			cub->res.ry * 128 + cub->spriteheight * 128;
+			cub->texy = ((cub->d * TEXHEIGHT) / cub->spriteheight) / 256;
+			if (cub->texture[4].data[cub->texx +
+			cub->texy * cub->texture[4].h])
+				cub->img.data[y * cub->res.rx + cub->stripe] =
+			cub->texture[4].data[cub->texx + cub->texy * cub->texture[4].h];
+			y++;
+		}
+	}
+}
+
 void	draw_sprites(t_cub3d *cub)
 {
-
 	int i;
-	int y;
-	
+
 	i = -1;
-	while(++i < cub->numsprites)
+	while (++i < cub->numsprites)
 	{
 		cub->sprites[i].spriteorder = i;
-		cub->sprites[i].spritedistance = ((cub->posx - cub->sprites[i].x) * (cub->posx - cub->sprites[i].x)) 
-		+ ((cub->posy - cub->sprites[i].y)*(cub->posy - cub->sprites[i].y));
+		cub->sprites[i].spritedistance = ((cub->posx - cub->sprites[i].x)
+		* (cub->posx - cub->sprites[i].x))
+		+ ((cub->posy - cub->sprites[i].y) * (cub->posy - cub->sprites[i].y));
 	}
 	tri(cub);
 	i = -1;
 	while (++i < cub->numsprites)
 	{
-		cub->spritex = cub->sprites[i].x - cub->posx;
-		cub->spritey = cub->sprites[i].y - cub->posy;
-		double invDet = 1.0 / (cub->planx * cub->diry - cub->dirx * cub->plany);
-		cub->transformx = invDet * (cub->diry * cub->spritex - cub->dirx * cub->spritey);
-		cub->transformy = invDet * (-cub->plany * cub->spritex + cub->planx * cub->spritey);
-		cub->spritescreenx = (int)((cub->res.rx / 2) * (1 + cub->transformx / cub->transformy));
-		cub->vmovescreen = (int)(vMove / cub->transformy);
-		cub->spriteheight = abs((int)(cub->res.ry / (cub->transformy))) / vDiv;
-		cub->drawstarty = -cub->spriteheight / 2 + cub->res.ry / 2 + cub->vmovescreen;
-		if(cub->drawstarty < 0) cub->drawstarty = 0;
-		cub->drawendy = cub->spriteheight / 2 + cub->res.ry / 2 + cub->vmovescreen;
-		if(cub->drawendy >= cub->res.ry) cub->drawendy = cub->res.ry - 1;
-		cub->spritewidth = abs((int)(cub->res.ry / (cub->transformy))) / uDiv;
-		cub->drawstartx = -cub->spritewidth / 2 + cub->spritescreenx;
-		if(cub->drawstartx < 0) cub->drawstartx = 0;
-		cub->drawendx = cub->spritewidth / 2 + cub->spritescreenx;
-		if(cub->drawendx >= cub->res.rx) cub->drawendx = cub->res.rx - 1;
-		cub->stripe = cub->drawstartx;
+		sprite_cal(i, cub);
 		while (cub->stripe < cub->drawendx)
 		{
-			cub->texX = (int)(256 * (cub->stripe - (-cub->spritewidth / 2 + cub->spritescreenx)) * texWidth / cub->spritewidth) / 256;
-			if(cub->transformy > 0 && cub->stripe > 0 && cub->stripe < cub->res.rx && cub->transformy < cub->zbuffer[cub->stripe])
-			{
-				y = cub->drawstarty;
-				while (y < cub->drawendy)
-				{
-					cub->d = (y-cub->vmovescreen) * 256 - cub->res.ry * 128 + cub->spriteheight * 128;
-					cub->texY = ((cub->d * texHeight) / cub->spriteheight) / 256;
-					if (cub->texture[4].data[cub->texX + cub->texY * cub->texture[4].h])
-					cub->img.data[y * cub->res.rx + cub->stripe] = cub->texture[4].data[cub->texX + cub->texY * cub->texture[4].h];
-					y++;
-				}
-			}
+			sprite_dr(cub);
 			cub->stripe++;
 		}
 	}
